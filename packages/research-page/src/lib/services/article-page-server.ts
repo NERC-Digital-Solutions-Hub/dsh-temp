@@ -1,7 +1,6 @@
 import { markdownToHtml } from '$lib/utils/markdown-to-html';
 import type { ContentConfig } from '$lib/types/config';
 import { base } from '$app/paths';
-import { browser } from 'svelte/environment';
 import { researchArticleIndexer } from '$lib/services/research-article-indexer';
 import type { ArticleMetadata } from '$lib/types/article';
 
