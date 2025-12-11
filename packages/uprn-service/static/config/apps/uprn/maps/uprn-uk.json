@@ -1,0 +1,300 @@
+{
+    "title": "UPRN PoC UK Web Map v1.5 FS Carbon Ellenberg",
+    "portalUrl": "https://nercdsh.dev.azure.manchester.ac.uk/portal",
+    "portalItemId": "ecf674b9ebd74622a8fb6b58d4995953",
+    "areaTreeview": {
+        "items": [
+            {
+                "_name": "Administrative Areas",
+                "id": "28be7f382ec54d50af8f9abc9b3f0f22",
+                "visibilityGroupId": "group:area",
+                "inheritanceGroupId": "group:area"
+            },
+            {
+                "_name": "Tiling Schemes",
+                "id": "111eb9faeffc4ca4b5b450db63c5cf97",
+                "visibilityGroupId": "group:area",
+                "inheritanceGroupId": "group:area"
+            },
+            {
+                "_name": "UPRN (05/2024)",
+                "id": "0e327f5490a244908704be78ea35cb15",
+                "isHidden": true
+            },
+            {
+                "_name": "ClimateJust",
+                "id": "e6346707673f4d26929f570f5da1a513",
+                "isHidden": true
+            },
+            {
+                "_name": "Noise Levels",
+                "id": "e6140a17ff414e6eab5229f434b73b39",
+                "isHidden": true
+            },
+            {
+                "_name": "Carbon Storage",
+                "id": "d087a4331e974af081215e1d19140c2f",
+                "isHidden": true
+            },
+            {
+                "_name": "Ellenberg Vegetation Indicators",
+                "id": "3a4f4fd4f2ac44e7985a6b57c5d33460",
+                "isHidden": true
+            }
+        ],
+        "visibilityGroups": [
+            {
+                "id": "group:area",
+                "maxVisibleLayers": 1
+            }
+        ],
+        "inheritanceGroups": [
+            {
+                "id": "group:area",
+                "inheritedProperties": [
+                    "visibilityGroupId"
+                ]
+            }
+        ]
+    },
+    "dataTreeview": {
+        "items": [
+            {
+                "_name": "UPRN (05/2024)",
+                "id": "0e327f5490a244908704be78ea35cb15",
+                "isDownloadable": false,
+                "isVisibleOnInit": true,
+                "visibilityGroupId": "group:uprn"
+            },
+            {
+                "_name": "Administrative Areas",
+                "id": "28be7f382ec54d50af8f9abc9b3f0f22",
+                "isHidden": true,
+                "disableVisibilityToggle": true,
+                "inheritanceGroupId": "group:hidden"
+            },
+            {
+                "_name": "Tiling Schemes",
+                "id": "111eb9faeffc4ca4b5b450db63c5cf97",
+                "isHidden": true,
+                "disableVisibilityToggle": true,
+                "inheritanceGroupId": "group:hidden"
+            },
+            {
+                "_name": "ClimateJust",
+                "id": "e6346707673f4d26929f570f5da1a513",
+                "isOpenOnInit": true,
+                "visibilityGroupId": "group:main",
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Noise Levels",
+                "id": "e6140a17ff414e6eab5229f434b73b39",
+                "visibilityGroupId": "group:main",
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Carbon Storage",
+                "id": "d087a4331e974af081215e1d19140c2f",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "71c9876f8b4546889de4f4a5899b50d6"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Ellenberg Vegetation Indicators",
+                "id": "3a4f4fd4f2ac44e7985a6b57c5d33460",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "71c9876f8b4546889de4f4a5899b50d6"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Carbon Raster Cells",
+                "id": "71c9876f8b4546889de4f4a5899b50d6",
+                "isHidden": true
+            },
+            {
+                "_name": "EVI Raster Cells",
+                "id": "71c9876f8b4546889de4f4a5899b50d6",
+                "isHidden": true
+            },
+            {
+                "_name": "ClimateJust - Grid (England) - Heat",
+                "id": "1eebeff0fdbe4b47b7837330c226927d",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - LSOAs (EN) (2011 - 2022 V3) - 2022 Data",
+                "id": "e5cb229378a94817bd21455af73d9a28",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - MSOAs (England) (2011) - SHVI",
+                "id": "1c69c72c59b641668c0205c6dbe716d1",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - Grid (UK) - UKCP18",
+                "id": "fe9cc277e5234407b262dac8cb50cdd4",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - LSOAs (UK) (2011) - Flood Data",
+                "id": "3ceb37d5aa504b4b965d03308cfc8930",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            }
+        ],
+        "visibilityGroups": [
+            {
+                "id": "group:uprn",
+                "maxVisibleLayers": 1
+            },
+            {
+                "id": "group:main",
+                "maxVisibleLayers": 1
+            }
+        ],
+        "inheritanceGroups": [
+            {
+                "id": "group:main",
+                "inheritedProperties": [
+                    "visibilityGroupId",
+                    "visibilityDependencyIds",
+                    "inheritanceGroupId",
+                    "customConverterId"
+                ]
+            },
+            {
+                "id": "group:hidden",
+                "inheritedProperties": [
+                    "inheritanceGroupId",
+                    "isHidden",
+                    "disableVisibilityToggle"
+                ]
+            }
+        ],
+        "fieldsToHide": [
+            "objectid",
+            "shape__area",
+            "shape__length",
+            "long",
+            "lat",
+            "uprn",
+            "x_coord",
+            "y_coord",
+            "noiseclass",
+            "Road_NLnight_ID",
+            "Rail_NLAeq16h_ID",
+            "fullgridid",
+            "fullgrid id",
+            "msoa id",
+            "lsoa id",
+            "ward id",
+            "globalid",
+            "lsoa_numbe",
+            "msoa_numbe",
+            "ward_numbe",
+            "lsoa11cd",
+            "lsoa11nm",
+            "msoa11cd",
+            "msoa11nm",
+            "gridcode",
+            "lsoa number",
+            "msoa number",
+            "ward number",
+            "lsoa code (2011)",
+            "lsoa name (2011)",
+            "lsoa code (2011) (v3)",
+            "lsoa name (2011) (v3)",
+            "msoa code (2011)",
+            "msoa name (2011)",
+            "grid code",
+            "perimeter (epsg 27700)",
+            "perimeterepsg27700",
+            "area (epsg 27700)",
+            "areaepsg27700"
+        ]
+    },
+    "selectableLayers": [
+        {
+            "_name": "Built Up Areas (Dec 22) GB",
+            "id": "6ba26647cc2a4499aef1a663df1a3128",
+            "nameField": "bua22nm",
+            "codeField": "bua22cd"
+        },
+        {
+            "_name": "Lower layer Super Output Areas (Dec 21) - EW Boundaries Fully Clipped V8",
+            "id": "c82f53ccaa4f48118fdf057847c13370",
+            "nameField": "lsoa21nm",
+            "codeField": "lsoa21cd"
+        },
+        {
+            "_name": "Middle layer Super Output Areas (Dec 21) - EW Boundaries Fully Clipped V6",
+            "id": "e8d6d5c2b5664d0bae2acfe1bc40c44e",
+            "nameField": "msoa21nm",
+            "codeField": "msoa21cd"
+        },
+        {
+            "_name": "Wards (Dec 23) - UK Boundaries Fully Clipped",
+            "id": "54c1acd6e53e49a79890f7716f2a9ba8",
+            "nameField": "wd23nm",
+            "codeField": "wd23cd"
+        },
+        {
+            "_name": "Counties and Unitary Authorities (Dec 23) - UK Boundaries Fully Clipped",
+            "id": "290eb38a3d144c2eaf182638c0900212",
+            "nameField": "ctyua23nm",
+            "codeField": "ctyua23cd"
+        },
+        {
+            "_name": "Upper Tier Local Authorities (Dec 22) - UK Boundaries Fully Clipped",
+            "id": "bbe5453836a84ea0aeb6b48a892c25da",
+            "nameField": "utla22nm",
+            "codeField": "utla22cd"
+        },
+        {
+            "_name": "Tiles 1 km",
+            "id": "16734e8299694650ac77db2fe87d04c8",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        },
+        {
+            "_name": "Tiles 5 km",
+            "id": "f992ba20262a42e395aab1f60aab2e9f",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        },
+        {
+            "_name": "Tiles 10 km",
+            "id": "cee5285bc1c84d6f8fa73ab9abfb8354",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        },
+        {
+            "_name": "Tiles 20 km",
+            "id": "168f16dc61c34eadb2c746a8a6cc52a4",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        },
+        {
+            "_name": "Tiles 50 km",
+            "id": "4f3a71db0dab4051bf71b1ded6d7f66d",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        },
+        {
+            "_name": "Tiles 100 km",
+            "id": "853a20ff621d44d7aaa63c02ddee0110",
+            "nameField": "tilename",
+            "codeField": "tilename"
+        }
+    ]
+}

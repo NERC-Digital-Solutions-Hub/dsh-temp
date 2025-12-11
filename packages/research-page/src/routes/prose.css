@@ -1,0 +1,147 @@
+/* Prose/Typography styles using shadcn design tokens */
+.prose {
+	@apply max-w-[65ch] text-foreground;
+}
+
+.prose :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-5 text-foreground;
+}
+
+.prose :where([class~='lead']):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-6 text-xl leading-relaxed text-muted-foreground;
+}
+
+.prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply font-medium text-primary underline transition-opacity hover:opacity-80;
+}
+
+.prose :where(strong):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply font-semibold text-foreground;
+}
+
+.prose :where(em):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply italic;
+}
+
+.prose :where(ol):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-5 list-decimal pl-6;
+}
+
+.prose :where(ul):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-5 list-disc pl-6;
+}
+
+.prose :where(li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-2;
+}
+
+.prose :where(ol > li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply pl-1.5;
+}
+
+.prose :where(ul > li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply pl-1.5;
+}
+
+/* Headings using shadcn pattern: font-semibold + leading-none */
+.prose :where(h1):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-0 mb-8 text-4xl leading-tight font-bold tracking-tight text-foreground;
+	color: #1a365d;
+}
+
+.prose :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-12 mb-4 text-3xl leading-tight font-semibold tracking-tight text-foreground;
+}
+
+.prose :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-8 mb-4 text-2xl leading-snug font-semibold text-foreground;
+}
+
+.prose :where(h4):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-6 mb-2 text-xl leading-snug font-semibold text-foreground;
+}
+
+.prose :where(h5):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-6 mb-2 text-lg leading-snug font-semibold text-foreground;
+}
+
+.prose :where(h6):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-6 mb-2 text-base leading-snug font-semibold text-foreground;
+}
+
+.prose :where(blockquote):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-6 border-l-4 border-border pl-4 font-medium text-foreground italic;
+}
+
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply rounded-sm bg-muted px-1.5 py-0.5 font-mono text-sm font-semibold text-foreground;
+}
+
+.prose :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-6 overflow-x-auto rounded-md bg-muted p-4 font-mono text-sm leading-relaxed font-normal text-foreground;
+}
+
+.prose :where(pre code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply border-0 bg-transparent p-0 font-mono text-sm;
+}
+
+.prose :where(table):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-8 w-full text-left text-sm;
+}
+
+.prose :where(thead):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply border-b border-border;
+}
+
+.prose :where(thead th):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply px-2 pb-2 align-bottom font-medium text-foreground;
+}
+
+.prose :where(tbody tr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply border-b border-border;
+}
+
+.prose :where(tbody tr:last-child):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply border-0;
+}
+
+.prose :where(tbody td):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply p-2 align-baseline;
+}
+
+.prose :where(hr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-12 border-t border-border;
+}
+
+.prose :where(img):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-8 rounded-md;
+}
+
+.prose :where(figure):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-8;
+}
+
+.prose :where(figcaption):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-2 text-center text-sm text-muted-foreground;
+}
+
+/* Prose-lg variant */
+.prose-lg {
+	@apply text-lg;
+}
+
+.prose-lg :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply my-6;
+}
+
+.prose-lg :where(h1):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mb-10 text-5xl;
+}
+
+.prose-lg :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-16 mb-6 text-4xl;
+}
+
+.prose-lg :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	@apply mt-12 mb-6 text-3xl;
+}

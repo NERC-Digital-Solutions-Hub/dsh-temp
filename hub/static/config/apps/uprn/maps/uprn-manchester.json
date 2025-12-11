@@ -1,0 +1,367 @@
+{
+    "title": "UPRN (Manchester)",
+    "portalItemId": "3fddcedca8c84c74903a709bece70326",
+    "areaTreeview": {
+        "items": [
+            {
+                "_name": "Administrative Areas",
+                "id": "08051aec5d9e4d8fbf96f8bec3564484",
+                "visibilityGroupId": "group:area",
+                "inheritanceGroupId": "group:area"
+            },
+            {
+                "_name": "Tiling Schemes",
+                "id": "772b1fff49734e73981247de9f50f4f3",
+                "visibilityGroupId": "group:area",
+                "inheritanceGroupId": "group:area"
+            },
+            {
+                "_name": "BNG Outline",
+                "id": "0fb7ff5d03434a87904636b8f6dce7dc",
+                "isVisibleOnInit": false,
+                "isHidden": true
+            },
+            {
+                "_name": "Upper Tier Local Authorities (Dec 22) - UK Boundaries Fully Clipped",
+                "id": "861795fad8e4474ebc9b46b5fed8a95e",
+                "isHidden": true
+            },
+            {
+                "_name": "UPRN (05/2024)",
+                "id": "b6311005e65b4f1c94204ba64dddd3ac",
+                "isHidden": true
+            },
+            {
+                "_name": "ClimateJust",
+                "id": "107874962ec9490ca68ffe477d864392",
+                "isHidden": true
+            },
+            {
+                "_name": "Noise Levels",
+                "id": "120d188dceaa4d3ab2d46278fbe26b84",
+                "isHidden": true
+            },
+            {
+                "_name": "Modelled Background Pollution",
+                "id": "e92320c720164a92a74497baca79d75c",
+                "isHidden": true
+            },
+            {
+                "_name": "Carbon Storage",
+                "id": "5aa90685cb3d4c4883d18987a9c001a2",
+                "isHidden": true
+            },
+            {
+                "_name": "Ellenberg Vegetation Indicators",
+                "id": "ec76bdcfae5043f5baf7f857ff4f7faf",
+                "isHidden": true
+            },
+            {
+                "_name": "AQREAN Surface Level",
+                "id": "ddd2915865b04106b879cb65d52b4d38",
+                "isHidden": true
+            },
+            {
+                "_name": "AQREAN Surface Level - Bias Corrected",
+                "id": "96128880b9a2483ba38d76bdf10d8940",
+                "isHidden": true
+            }
+        ],
+        "visibilityGroups": [
+            {
+                "id": "group:area",
+                "maxVisibleLayers": 1
+            }
+        ],
+        "inheritanceGroups": [
+            {
+                "id": "group:area",
+                "inheritedProperties": [
+                    "visibilityGroupId"
+                ]
+            }
+        ]
+    },
+    "dataTreeview": {
+        "items": [
+            {
+                "_name": "UPRN (05/2024)",
+                "id": "b6311005e65b4f1c94204ba64dddd3ac",
+                "isDownloadable": false,
+                "isVisibleOnInit": true,
+                "visibilityGroupId": "group:uprn"
+            },
+            {
+                "_name": "Administrative Areas",
+                "id": "08051aec5d9e4d8fbf96f8bec3564484",
+                "isHidden": true,
+                "disableVisibilityToggle": true,
+                "inheritanceGroupId": "group:hidden"
+            },
+            {
+                "_name": "Tiling Schemes",
+                "id": "772b1fff49734e73981247de9f50f4f3",
+                "isHidden": true,
+                "disableVisibilityToggle": true,
+                "inheritanceGroupId": "group:hidden"
+            },
+            {
+                "_name": "ClimateJust",
+                "id": "107874962ec9490ca68ffe477d864392",
+                "isOpenOnInit": true,
+                "visibilityGroupId": "group:main",
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Noise Levels",
+                "id": "120d188dceaa4d3ab2d46278fbe26b84",
+                "visibilityGroupId": "group:main",
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Modelled Background Pollution",
+                "id": "e92320c720164a92a74497baca79d75c",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "64b9c32dfce84e359e0055db6305e43d"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Carbon Storage",
+                "id": "5aa90685cb3d4c4883d18987a9c001a2",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "fe0639d266784e52a650af282be756a3"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Ellenberg Vegetation Indicators",
+                "id": "ec76bdcfae5043f5baf7f857ff4f7faf",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "9c312305e8404a86af2e2637fcc676dd"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "AQREAN Surface Level",
+                "id": "ddd2915865b04106b879cb65d52b4d38",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "98449003380e442583d27927de806888"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "AQREAN Surface Level - Bias Corrected",
+                "id": "96128880b9a2483ba38d76bdf10d8940",
+                "visibilityGroupId": "group:main",
+                "visibilityDependencyIds": [
+                    "e769286c49bf4febbabc5ecf4f051a56"
+                ],
+                "inheritanceGroupId": "group:main"
+            },
+            {
+                "_name": "Modelled Background Pollution Raster Cells",
+                "id": "64b9c32dfce84e359e0055db6305e43d",
+                "isHidden": true
+            },
+            {
+                "_name": "Carbon Raster Cells",
+                "id": "fe0639d266784e52a650af282be756a3",
+                "isHidden": true
+            },
+            {
+                "_name": "EVI Raster Cells",
+                "id": "9c312305e8404a86af2e2637fcc676dd",
+                "isHidden": true
+            },
+            {
+                "_name": "AQREAN Raster Cells",
+                "id": "98449003380e442583d27927de806888",
+                "isHidden": true
+            },
+            {
+                "_name": "AQREAN Raster Cells (Bias Corrected)",
+                "id": "e769286c49bf4febbabc5ecf4f051a56",
+                "isHidden": true
+            },
+            {
+                "_name": "ClimateJust - Grid (England) - Heat",
+                "id": "27e3fa849b2046e59d8392a3ae42f237",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - LSOAs (EN) (2011 - 2022 V3) - 2022 Data",
+                "id": "6d433602f0564ff9ae3b21a2423f1c5f",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - MSOAs (England) (2011) - SHVI",
+                "id": "a51f91a32c3645e6ae6302785bf24592",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - Grid (UK) - UKCP18",
+                "id": "af6906c7ca3c4b4fa7450183ff9c8982",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - LSOAs (UK) (2011) - Flood Data",
+                "id": "d578d83b32354175ad5f25b2069f79b6",
+                "showFields": true,
+                "customConverterId": "aliasPath"
+            }
+        ],
+        "visibilityGroups": [
+            {
+                "id": "group:uprn",
+                "maxVisibleLayers": 1
+            },
+            {
+                "id": "group:main",
+                "maxVisibleLayers": 1
+            }
+        ],
+        "inheritanceGroups": [
+            {
+                "id": "group:main",
+                "inheritedProperties": [
+                    "visibilityGroupId",
+                    "visibilityDependencyIds",
+                    "inheritanceGroupId",
+                    "customConverterId"
+                ]
+            },
+            {
+                "id": "group:hidden",
+                "inheritedProperties": [
+                    "inheritanceGroupId",
+                    "isHidden",
+                    "disableVisibilityToggle"
+                ]
+            }
+        ],
+        "fieldsToHide": [
+            "objectid",
+            "shape__area",
+            "shape__length",
+            "long",
+            "lat",
+            "uprn",
+            "x_coord",
+            "y_coord",
+            "noiseclass",
+            "Road_NLnight_ID",
+            "Rail_NLAeq16h_ID",
+            "fullgridid",
+            "fullgrid id",
+            "msoa id",
+            "lsoa id",
+            "ward id",
+            "globalid",
+            "lsoa_numbe",
+            "msoa_numbe",
+            "ward_numbe",
+            "lsoa11cd",
+            "lsoa11nm",
+            "msoa11cd",
+            "msoa11nm",
+            "gridcode",
+            "lsoa number",
+            "msoa number",
+            "ward number",
+            "lsoa code (2011)",
+            "lsoa name (2011)",
+            "lsoa code (2011) (v3)",
+            "lsoa name (2011) (v3)",
+            "msoa code (2011)",
+            "msoa name (2011)",
+            "grid code",
+            "perimeter (epsg 27700)",
+            "perimeterepsg27700",
+            "area (epsg 27700)",
+            "areaepsg27700"
+        ]
+    },
+    "selectableLayers": [
+        {
+            "_name": "Built Up Areas (Dec 22) GB",
+            "id": "9a9d377950bf41399315865509bd8980",
+            "nameField": "BUA22NM",
+            "codeField": "BUA22CD"
+        },
+        {
+            "_name": "Lower layer Super Output Areas (Dec 21) - EW Boundaries Fully Clipped V8",
+            "id": "cbbe6293f9f348479583f11e9aa13cd2",
+            "nameField": "LSOA21NM",
+            "codeField": "LSOA21CD"
+        },
+        {
+            "_name": "Middle layer Super Output Areas (Dec 21) - EW Boundaries Fully Clipped V6",
+            "id": "5ede9db22134421e93e8bc68232abbb7",
+            "nameField": "MSOA21NM",
+            "codeField": "MSOA21CD"
+        },
+        {
+            "_name": "Wards (Dec 23) - UK Boundaries Fully Clipped",
+            "id": "84f96dbe6c894f528b80c639e0a2b207",
+            "nameField": "WD23NM",
+            "codeField": "WD23CD"
+        },
+        {
+            "_name": "Counties and Unitary Authorities (Dec 23) - UK Boundaries Fully Clipped",
+            "id": "b5db7e240f6340368a15862f7ddc6f3a",
+            "nameField": "CTYUA23NM",
+            "codeField": "CTYUA23CD"
+        },
+        {
+            "_name": "Upper Tier Local Authorities (Dec 22) - UK Boundaries Fully Clipped",
+            "id": "861795fad8e4474ebc9b46b5fed8a95e",
+            "nameField": "UTLA22NM",
+            "codeField": "UTLA22CD"
+        },
+        {
+            "_name": "Tiles 1 km",
+            "id": "bcf8963020804d39bbc217a3e7514b1c",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        },
+        {
+            "_name": "Tiles 5 km",
+            "id": "379348562728496cac32c6552656096d",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        },
+        {
+            "_name": "Tiles 10 km",
+            "id": "3c3fb65d31654335bf7b083940277e4d",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        },
+        {
+            "_name": "Tiles 20 km",
+            "id": "ede1c16cdc4541429cf662cb354f4235",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        },
+        {
+            "_name": "Tiles 50 km",
+            "id": "7214bb47b187497bbcb6c22e56228315",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        },
+        {
+            "_name": "Tiles 100 km",
+            "id": "388795f5ba2e49e7b54c7372e8b13a93",
+            "nameField": "TILENAME",
+            "codeField": "TILENAME"
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+packages:
+  - 'hub'
+  - 'packages/*'
+onlyBuiltDependencies:
+  - esbuild

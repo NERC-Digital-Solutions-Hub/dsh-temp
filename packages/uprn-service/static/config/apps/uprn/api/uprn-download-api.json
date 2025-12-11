@@ -1,0 +1,8 @@
+{
+    "baseUrl": "https://dshapitest.xyz/uprn-download",
+    "healthRoute": "/healthz",
+    "requestJobRoute": "/request-job",
+    "requestJobStatusesRoute": "/request-job-statuses",
+    "getAreaSelectionLimitsRoute": "/get-area-selection-limits",
+    "fetchDownloadRoute": "/fetch-download"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "dsh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "hub",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace hub",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.22.0"
+}

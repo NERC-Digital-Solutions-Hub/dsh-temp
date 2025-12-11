@@ -1,0 +1,15 @@
+{
+    "content": {
+        "organisation": "NERC-Digital-Solutions-Hub",
+        "repo": "dsh-content",
+        "relativePath": "pages",
+        "research": {
+            "dir": "research",
+            "main": "main.md",
+            "articles": {
+                "dir": "articles",
+                "index": "index.txt"
+            }
+        }
+    }
+}

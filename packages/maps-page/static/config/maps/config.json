@@ -1,0 +1,49 @@
+{
+    "organisations": [
+        {
+            "id": "uom-agol",
+            "name": "UoM AGOL",
+            "portalUrl": "https://www.arcgis.com",
+            "endpoint": "/sharing/rest/search",
+            "queryParams": {
+                "orgid": "SfF67lOzKAmtSACX"
+            }
+        },
+        {
+            "id": "dsh-agol",
+            "name": "DSH AGOL",
+            "portalUrl": "https://www.arcgis.com",
+            "endpoint": "/sharing/rest/content/groups/9acfe04db57040b4890c352c21e01fa9/search"
+        },
+        {
+            "id": "dsh-uom",
+            "name": "DSH Enterprise (UoM)",
+            "portalUrl": "https://base.sandbox.digital-solutions.uk/portal",
+            "endpoint": "/sharing/rest/content/groups/398f6738bcd94c99bc005c75ec2576b7/search"
+        },
+        {
+            "id": "dsh",
+            "name": "DSH Enterprise (AZ)",
+            "portalUrl": "https://nercdsh.dev.azure.manchester.ac.uk/portal",
+            "endpoint": "/sharing/rest/search"
+        },
+        {
+            "id": "nat-eng",
+            "name": "Natural England",
+            "portalUrl": "https://www.arcgis.com",
+            "endpoint": "/sharing/rest/search",
+            "queryParams": {
+                "orgid": "JJzESW51TqeY9uat"
+            }
+        },
+        {
+            "id": "met",
+            "name": "MET Office",
+            "portalUrl": "https://www.arcgis.com",
+            "endpoint": "/sharing/rest/search",
+            "queryParams": {
+                "orgid": "Lq3V5RFuTBC9I7kv"
+            }
+        }
+    ]
+}

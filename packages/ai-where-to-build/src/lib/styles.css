@@ -1,0 +1,1 @@
+@source './components'; /* this is needed so tailwind applies the app styling when this package is added as a dependency! */

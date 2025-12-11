@@ -1,0 +1,37 @@
+{
+    "uprnDownloadApiConfig": {
+        "itemType": "url",
+        "path": "/config/apps/uprn/api/uprn-download-api.json"
+    },
+    "aiUprnChatbotApiConfig": {
+        "itemType": "url",
+        "path": "/config/apps/uprn/api/uprn-chatbot-api.json"
+    },
+    "mapsConfig": [
+        {
+            "itemType": "url",
+            "path": "/config/apps/uprn/maps/uprn-manchester.json"
+        },
+        {
+            "itemType": "url",
+            "path": "/config/apps/uprn/maps/uprn-uk.json"
+        }
+    ],
+    "mainSidebarSizes": [
+        {
+            "breakpoint": 1280,
+            "originalSize": "700px",
+            "minSize": "500px"
+        },
+        {
+            "breakpoint": 1024,
+            "originalSize": "500px",
+            "minSize": "250px"
+        },
+        {
+            "breakpoint": 768,
+            "originalSize": "400px",
+            "minSize": "200px"
+        }
+    ]
+}

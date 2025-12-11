@@ -1,0 +1,138 @@
+{
+    "analysisSettings": [
+        {
+            "__name": "Greenspace Site",
+            "id": "a209840a5b0a4d1face0e711bb5df6d0",
+            "fieldName": "function_",
+            "fieldValues": [
+                {
+                    "value": "Allotments Or Community Growing Spaces",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 300,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Bowling Green",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Cemetery",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Golf Course",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Other Sports Facility",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Play Space",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 500,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Playing Field",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 500,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Public Park Or Garden",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 750,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Religious Grounds",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                },
+                {
+                    "value": "Tennis Court",
+                    "weight": -1,
+                    "buffers": [
+                        {
+                            "distance": 100,
+                            "unit": "meters",
+                            "weight": 0.25
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "__name": "Rail Stations England Wales",
+            "id": "363cf24f61ed4ffa981862e5d2aee8ba",
+            "weight": 0.3,
+            "buffers": [
+                {
+                    "distance": 1000,
+                    "unit": "meters",
+                    "weight": 0.3
+                }
+            ]
+        },
+        {
+            "__name": "OS OpenMap Local Buildings",
+            "id": "e0df7f3ac3a64e8d96f312dfc3f757b6",
+            "weight": -1
+        }
+    ]
+}
