@@ -9,10 +9,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace hub",
-    "build": "npm run build --workspaces",
-    "lint": "npm run lint --workspaces",
-    "test": "npm run test --workspaces"
+    "dev": "pnpm --filter hub dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test"
   },
   "keywords": [],
   "author": "",
