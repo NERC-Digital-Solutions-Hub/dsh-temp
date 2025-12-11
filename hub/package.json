@@ -49,6 +49,7 @@
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/node": "^22",
 		"bits-ui": "^2.14.4",
+		"chromium-bidi": "^11.0.1",
 		"clsx": "^2.1.1",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
