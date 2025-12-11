@@ -17,7 +17,17 @@ const config = {
 			paths: {
 				base: '/dsh-temp'
 			}
-		})
+		}),
+		prerender: {
+			handleHttpError: ({ status, path, message }) => {
+				if (status >= 500 && path === '/') {
+					console.warn('Ignoring prerender error on /:', message);
+					return;
+				}
+
+				throw new Error(message);
+			}
+		}
 	}
 };
 
