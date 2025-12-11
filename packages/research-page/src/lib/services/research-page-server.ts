@@ -7,18 +7,22 @@ import { researchArticleIndexer } from '$lib/services/research-article-indexer';
 let contentConfig: ContentConfig | null = null;
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
-	const contentConfig = await getContentConfig(fetch);
+	try {
+		const contentConfig = await getContentConfig(fetch);
 
-	const mdUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.main}`;
-	const baseUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}`;
-	const indexUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}/${contentConfig.content.research.articles.index}`;
-	await researchArticleIndexer.initialize(baseUrl, indexUrl);
-	const articleMetadata = researchArticleIndexer.getAllMetadata();
+		const mdUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.main}`;
+		const baseUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}`;
+		const indexUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}/${contentConfig.content.research.articles.index}`;
+		await researchArticleIndexer.initialize(baseUrl, indexUrl);
+		const articleMetadata = researchArticleIndexer.getAllMetadata();
 
-	return {
-		...(await markdownToHtml(mdUrl, fetch, setHeaders)),
-		articleMetadata
-	};
+		return {
+			...(await markdownToHtml(mdUrl, fetch, setHeaders)),
+			articleMetadata
+		};
+	} catch (error) {
+		console.error('Error loading research page:', error);
+	}
 };
 
 async function getContentConfig(fetch: any): Promise<ContentConfig> {
