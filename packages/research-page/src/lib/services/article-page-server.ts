@@ -1,14 +1,12 @@
-import type { PageServerLoad } from './$types';
 import { markdownToHtml } from '$lib/utils/markdown-to-html';
 import type { ContentConfig } from '$lib/types/config';
-import { base } from '$app/paths';
 import { researchArticleIndexer } from '$lib/services/research-article-indexer';
 import type { ArticleMetadata } from '$lib/types/article';
 
 let contentConfig: ContentConfig | null = null;
 
-export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
-	const contentConfig = await getContentConfig(fetch);
+export const load = async (origin: string, { params, fetch, setHeaders }: { params: any; fetch: any; setHeaders: any }) => {
+	const contentConfig = await getContentConfig(origin, fetch);
 
 	const baseUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}`;
 	const indexUrl = `https://github.com/${contentConfig.content.organisation}/${contentConfig.content.repo}/raw/refs/heads/dev/${contentConfig.content.relativePath}/${contentConfig.content.research.dir}/${contentConfig.content.research.articles.dir}/${contentConfig.content.research.articles.index}`;
@@ -29,12 +27,12 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
 	return await markdownToHtml(url, fetch, setHeaders);
 };
 
-async function getContentConfig(fetch: any): Promise<ContentConfig> {
+async function getContentConfig(origin: string, fetch: any): Promise<ContentConfig> {
 	if (contentConfig) {
 		return contentConfig;
 	}
 
-	const res = await fetch(`${base}/config/content.json`);
+	const res = await fetch(`${origin}/config/content.json`);
 	if (!res.ok) {
 		throw new Error(`Failed to fetch content config: ${res.status} ${res.statusText}`);
 	}

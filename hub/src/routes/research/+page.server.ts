@@ -1,3 +1,13 @@
 import { researchPageLoad } from '@dsh/research-page';
+import { browser } from '$app/environment';
+import { base } from '$app/paths';
+import type { PageServerLoad } from './$types';
 
-export const load = researchPageLoad;
+export const load : PageServerLoad = async ({ params, fetch, setHeaders }) => {
+    if(!browser)
+    {
+        return;
+    }
+
+    return await researchPageLoad(base, { params, fetch, setHeaders });
+}

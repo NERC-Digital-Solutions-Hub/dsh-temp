@@ -13,13 +13,9 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		//adapter: adapter()
 		adapter: adapter({
-			pages: '../docs',
-			assets: '../docs',
 			fallback: '404.html',
-			precompress: false,
-			strict: true,
 			paths: {
-				base: '/dsh'
+				base: '/dsh-temp'
 			}
 		})
 	}
