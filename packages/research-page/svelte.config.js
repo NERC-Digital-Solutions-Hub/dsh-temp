@@ -20,7 +20,8 @@ const config = {
 				}
 
 				throw new Error(message);
-			}
+			},
+			handleUnseenRoutes: 'warn'
 		}
 	}
 };
