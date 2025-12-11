@@ -25,19 +25,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: pnpm
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.22.0 
+          version: 10.22.0
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build
         env:
-          BASE_PATH: "/${{ github.event.repository.name }}" # matches svelte.config paths.base
+          BASE_PATH: "/${{ github.event.repository.name }}"
         run: pnpm build
 
       - name: Upload Pages artifact
