@@ -10,7 +10,7 @@
 	import { cleanHtmlText } from '$lib/utils/decode-html';
 	import { Check, CircleX } from '@lucide/svelte';
 	import { SvelteMap } from 'svelte/reactivity';
-	import { asset, base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import { MapViewService } from '$lib/services/command-search/map-view-service';
 
 	type Props = {
@@ -42,17 +42,13 @@
 	let layers: PortalLayerSummary[] = $state([]);
 	const layerSummariesById = new Map<string, PortalLayerSummary>();
 
-	const SPATIAL_REFERENCE_BASEMAP_OVERRIDES: Record<number, string> = {
-		27700: 'OS_Open_Background'
-	};
+	// We keep the view/basemap stable (typically Web Mercator) and do NOT switch SR.
+	const DESIRED_BASEMAP_ID = 'gray-vector'; // or 'dark-gray-vector'
 
 	const filteredLayers = $derived.by(() => {
 		const results = layers;
 		const normalizedQuery = query.trim().toLowerCase();
-
-		if (!normalizedQuery) {
-			return results;
-		}
+		if (!normalizedQuery) return results;
 
 		return results.filter((item) => {
 			const title = item?.title?.toLowerCase() ?? '';
@@ -62,11 +58,19 @@
 	});
 
 	onMount(async () => {
-		if (!browser) {
-			return;
-		}
+		if (!browser) return;
 
 		mapView = commandSearchContext.get(MapViewService).mapView;
+
+		// Force the basemap to gray and keep it stable.
+		try {
+			const { default: Basemap } = await import('@arcgis/core/Basemap');
+			if (mapView?.map) {
+				mapView.map.basemap = await Basemap.fromId(DESIRED_BASEMAP_ID);
+			}
+		} catch (e) {
+			console.warn(`Failed to set basemap "${DESIRED_BASEMAP_ID}"`, e);
+		}
 
 		const organisationService = commandSearchContext.get(OrganisationCommandService);
 		const activeOrgId = organisationService.getActiveOrganisationId();
@@ -74,9 +78,6 @@
 			console.warn('No active organisation selected in OrganisationCommandService');
 			return;
 		}
-
-		const portalUrl: string = organisationService.getActiveOrganisationPortalUrl();
-		const endpoint: string = organisationService.getActiveOrganisationEndpoint();
 
 		isLoading = true;
 		try {
@@ -88,7 +89,6 @@
 
 			const data = await response.json();
 
-			// Filter for Web Maps and map to metadata
 			layers = (data.results ?? [])
 				.filter((item: any) => LAYER_TYPES.includes(item.type))
 				.map((item: any) => ({
@@ -101,29 +101,6 @@
 		} finally {
 			isLoading = false;
 		}
-		// const layerQuery = `type:(${LAYER_TYPES.map((type) => `"${type}"`).join(' OR ')})`;
-		// const queryParams = organisationService.getActiveOrganisationQueryParams();
-
-		// const formattedQueryParams = Object.entries(queryParams)
-		// 	.map(([key, value]) => `${key}:"${value}"`)
-		// 	.join(' AND ');
-
-		// await useEsriRequest.load(portalUrl + endpoint, {
-		// 	query: {
-		// 		q: `${layerQuery}` + (formattedQueryParams ? ` AND ${formattedQueryParams}` : ''),
-		// 		num: 100,
-		// 		f: 'json'
-		// 	}
-		// });
-
-		// layers = (useEsriRequest.data?.results ?? []).map((item: any) => ({
-		// 	id: item.id,
-		// 	title: item.title,
-		// 	description: cleanHtmlText(item.description),
-		// 	owner: item.owner,
-		// 	type: item.type,
-		// 	spatialReferenceWkid: item.spatialReference?.wkid ?? item.spatialReference?.latestWkid
-		// }));
 
 		layerSummariesById.clear();
 		for (const layerSummary of layers) {
@@ -177,7 +154,6 @@
 	});
 
 	async function toggleLayer(itemId: string) {
-		// Check if layer is already added
 		if (addedLayers.has(itemId)) {
 			removeLayerFromMap(itemId);
 		} else {
@@ -187,34 +163,81 @@
 
 	function removeLayerFromMap(itemId: string) {
 		const layer = addedLayers.get(itemId);
-		if (!layer || !mapView || !mapView.map) {
-			return;
-		}
+		if (!layer || !mapView?.map) return;
 
 		mapView.map.remove(layer);
 		addedLayers.delete(itemId);
-		addedLayers = addedLayers; // Trigger reactivity
+		addedLayers = addedLayers;
 		console.log(`Layer removed from the map: ${itemId}`);
 	}
 
 	function isLayerAdded(itemId: string): boolean {
-		for (const layer of mapView?.map?.allLayers ?? []) {
-			if (layer.portalItem?.id === itemId) {
-				return true;
-				console.log(`Layer found on the map: ${itemId}`);
-			}
+		for (const lyr of mapView?.map?.allLayers ?? []) {
+			if (lyr.portalItem?.id === itemId) return true;
 		}
-
 		return false;
 	}
 
-	async function addLayerToMap(itemId: string) {
-		if (!browser) {
+	// ----------------------------
+	// Layer compatibility helpers
+	// ----------------------------
+
+	type SupportedLayer =
+		| __esri.FeatureLayer
+		| __esri.MapImageLayer
+		| __esri.TileLayer
+		| __esri.VectorTileLayer;
+
+	function isTiled(layer: __esri.Layer): layer is __esri.TileLayer | __esri.VectorTileLayer {
+		return layer.type === 'tile' || layer.type === 'vector-tile';
+	}
+
+	function wkidOf(sr?: __esri.SpatialReference | null): number | undefined {
+		return sr?.wkid ?? sr?.latestWkid ?? undefined;
+	}
+
+	async function getTiledLayerWkid(
+		layer: __esri.TileLayer | __esri.VectorTileLayer
+	): Promise<number | undefined> {
+		await layer.load();
+		const ti = (layer as any).tileInfo as __esri.TileInfo | undefined;
+		return wkidOf(ti?.spatialReference ?? layer.spatialReference ?? null);
+	}
+
+	/**
+	 * We keep the basemap (gray) stable.
+	 * Therefore, we do NOT switch the MapView spatialReference.
+	 *
+	 * - FeatureLayer / MapImageLayer: OK to add (server-side reprojection usually works).
+	 * - TileLayer / VectorTileLayer: ONLY add if its tile scheme WKID matches the view WKID;
+	 *   otherwise it will be invisible (suspended) just like your basemap was.
+	 */
+	async function ensureLayerCompatibleWithStableView(layer: SupportedLayer) {
+		if (!mapView) return;
+
+		const viewWkid = wkidOf(mapView.spatialReference ?? null);
+
+		if (!isTiled(layer)) return;
+
+		const layerWkid = await getTiledLayerWkid(layer);
+		if (!viewWkid || !layerWkid) {
+			// If we can't determine, allow it but warn (could still end up invisible).
+			console.warn('Unable to determine WKID for tiled layer or view; layer may not display.');
 			return;
 		}
 
-		if (!mapView || !mapView.map) {
-			console.error('Map or MapView is not initialized');
+		if (layerWkid !== viewWkid) {
+			throw new Error(
+				`This is a tiled layer (tile scheme WKID ${layerWkid}) but the map view is WKID ${viewWkid}. ` +
+					`Tiled/VectorTile layers cannot be reprojected, so it would not display.`
+			);
+		}
+	}
+
+	async function addLayerToMap(itemId: string) {
+		if (!browser) return;
+
+		if (!mapView?.map) {
 			layerIdError.set(itemId, new Error('Map is not ready. Please wait and try again.'));
 			return;
 		}
@@ -223,52 +246,64 @@
 		layerIdError.delete(itemId);
 
 		try {
-			console.log(`Loading layer with portal item ID: ${itemId}`);
-
-			// const portalUrl = `https://nercdsh.dev.azure.manchester.ac.uk/portal`;
-			// esriConfig.portalUrl = portalUrl as string;
-			// console.log('Portal URL configured:', esriConfig.portalUrl);
-
-			// const { addProxyRule } = urlUtils;
-			// console.log('Adding proxy rule for portal traffic');
-			// addProxyRule({
-			// 	urlPrefix: 'https://nercdsh.dev.azure.manchester.ac.uk',
-			// 	proxyUrl: `${base}/proxy/Java/proxy.jsp`
-			// });
+			// Keep basemap pinned to gray (in case anything else changed it)
+			try {
+				const { default: Basemap } = await import('@arcgis/core/Basemap');
+				mapView.map.basemap = await Basemap.fromId(DESIRED_BASEMAP_ID);
+			} catch {}
 
 			const organisationService = commandSearchContext.get(OrganisationCommandService);
-			const activeOrgId = organisationService.getActiveOrganisationId();
-			if (!activeOrgId) {
-				console.warn('No active organisation selected in OrganisationCommandService');
-				return;
-			}
-
 			const portalUrl: string = organisationService.getActiveOrganisationPortalUrl();
 
-			const [{ default: Layer }, { default: Portal }] = await Promise.all([
+			const [
+				{ default: Layer },
+				{ default: Portal },
+				{ default: FeatureLayer },
+				{ default: MapImageLayer },
+				{ default: TileLayer },
+				{ default: VectorTileLayer }
+			] = await Promise.all([
 				import('@arcgis/core/layers/Layer'),
-				import('@arcgis/core/portal/Portal')
+				import('@arcgis/core/portal/Portal'),
+				import('@arcgis/core/layers/FeatureLayer'),
+				import('@arcgis/core/layers/MapImageLayer'),
+				import('@arcgis/core/layers/TileLayer'),
+				import('@arcgis/core/layers/VectorTileLayer')
 			]);
-			const portal = new Portal({ url: portalUrl });
-			const layer = await Layer.fromPortalItem({
-				portalItem: {
-					id: itemId,
-					portal
-				}
-			});
-			await layer.load();
 
-			const targetSpatialReference = await resolveTargetSpatialReference(layer, itemId);
-			await ensureViewSpatialReference(targetSpatialReference);
-			mapView.map.add(layer);
-			addedLayers.set(itemId, layer);
-			addedLayers = addedLayers; // Trigger reactivity
-			console.log('Layer added to the map');
+			const portal = new Portal({ url: portalUrl });
+
+			const layer = (await Layer.fromPortalItem({
+				portalItem: { id: itemId, portal }
+			})) as __esri.Layer;
+
+			if (
+				!(layer instanceof FeatureLayer) &&
+				!(layer instanceof MapImageLayer) &&
+				!(layer instanceof TileLayer) &&
+				!(layer instanceof VectorTileLayer)
+			) {
+				throw new Error(`Unsupported layer type "${layer.type}" for item ID ${itemId}`);
+			}
+
+			console.log(`Adding layer to the map: ${itemId}`);
+
+			const supported = layer as SupportedLayer;
+			await supported.load();
+
+			// No SR switching. Just reject incompatible tiled layers.
+			await ensureLayerCompatibleWithStableView(supported);
+
+			mapView.map.add(supported);
+			addedLayers.set(itemId, supported);
+			addedLayers = addedLayers;
+
+			console.log(`Layer added to the map: ${itemId}`, 'basemap:', mapView.map.basemap);
 
 			try {
-				await mapView.whenLayerView(layer);
-				if (layer.fullExtent) {
-					await mapView.goTo(layer.fullExtent);
+				await mapView.whenLayerView(supported);
+				if ((supported as any).fullExtent) {
+					await mapView.goTo((supported as any).fullExtent);
 				}
 			} catch (viewError) {
 				console.warn('Layer view not ready for navigation', viewError);
@@ -276,106 +311,9 @@
 		} catch (error) {
 			console.error('Error loading layer:', error);
 			layerIdError.set(itemId, error as Error);
-			loadingLayerId = null;
 		} finally {
 			loadingLayerId = null;
 		}
-	}
-
-	async function resolveTargetSpatialReference(layer: __esri.Layer, layerId: string) {
-		const directSpatialReference = getLayerSpatialReference(layer);
-		if (directSpatialReference) {
-			return directSpatialReference;
-		}
-
-		const summary = layerSummariesById.get(layerId);
-		if (summary?.spatialReferenceWkid) {
-			const { default: SpatialReference } = await import('@arcgis/core/geometry/SpatialReference');
-			return new SpatialReference({ wkid: summary.spatialReferenceWkid });
-		}
-
-		const portalItemSpatialReference = (layer.portalItem as any)?.spatialReference;
-		if (portalItemSpatialReference) {
-			return portalItemSpatialReference as __esri.SpatialReference;
-		}
-
-		return null;
-	}
-
-	function getLayerSpatialReference(layer: __esri.Layer): __esri.SpatialReference | null {
-		const candidate = (layer as any)?.spatialReference;
-		return candidate ?? null;
-	}
-
-	function getWkid(spatialReference?: __esri.SpatialReference | null): number | undefined {
-		if (!spatialReference) {
-			return undefined;
-		}
-
-		const srAny = spatialReference as any;
-		return spatialReference.wkid ?? srAny?.latestWkid ?? undefined;
-	}
-
-	async function loadCompatibleBasemap(wkid?: number) {
-		if (!mapView || !mapView.map) {
-			console.warn('MapView or Map is not available for basemap loading');
-			return null;
-		}
-
-		if (!wkid) {
-			return mapView.map.basemap;
-		}
-
-		const basemapId = SPATIAL_REFERENCE_BASEMAP_OVERRIDES[wkid];
-		if (!basemapId) {
-			return mapView.map.basemap;
-		}
-
-		const { default: Basemap } = await import('@arcgis/core/Basemap');
-		try {
-			return await Basemap.fromId(basemapId);
-		} catch (error) {
-			console.warn(`Failed to load basemap ${basemapId}`, error);
-			return mapView.map.basemap;
-		}
-	}
-
-	async function ensureViewSpatialReference(target?: __esri.SpatialReference | null) {
-		if (!mapView || !mapView.map || !target) {
-			console.log(
-				'MapView or target spatial reference is not available',
-				'mapView:',
-				mapView,
-				'target:',
-				target
-			);
-			return;
-		}
-
-		const targetWkid = getWkid(target);
-		const currentWkid = getWkid(mapView.spatialReference ?? undefined);
-		console.log(
-			`Ensuring map view spatial reference compatibility: target WKID=${targetWkid}, current WKID=${currentWkid}`
-		);
-		if (!targetWkid || targetWkid === currentWkid) {
-			return;
-		}
-
-		const [{ default: Map }] = await Promise.all([import('@arcgis/core/Map')]);
-		const compatibleBasemap = await loadCompatibleBasemap(targetWkid);
-		const existingLayers = mapView.map.layers.toArray();
-		const ground = mapView.map.ground;
-		mapView.map.removeAll();
-
-		const newMap = new Map({
-			basemap: compatibleBasemap ?? undefined,
-			ground
-		} as __esri.MapProperties);
-		newMap.spatialReference = target;
-		newMap.layers.addMany(existingLayers);
-		mapView.map = newMap;
-
-		await mapView.when();
 	}
 </script>
 
