@@ -283,6 +283,8 @@
 						>
 							<Download />
 						</Button>
+					{:else if download.externalId && download.status === 'failed'}
+						<p class="text-sm text-red-600 ml-2">Download failed. Please try again.</p>
 					{/if}
 					<Button
 						variant="ghost"
