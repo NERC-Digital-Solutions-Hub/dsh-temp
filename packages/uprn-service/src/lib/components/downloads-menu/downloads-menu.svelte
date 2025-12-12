@@ -240,7 +240,13 @@
 	{#if downloads.length > 0}
 		<ul class="selected-list">
 			{#each downloads as download}
-				<SelectionEntryCard title={download.externalId ? download.externalId : 'Pending...'}>
+				<SelectionEntryCard title={
+				download.externalId 
+					? download.externalId 
+					: download.status !== DownloadStatus.Failed 
+						? 'Pending...'
+						: 'Failed to start download'
+				}>
 					<Button
 						variant="ghost"
 						size="sm"
@@ -250,7 +256,7 @@
 						disabled
 					>
 						{@const StatusIcon = getStatusIcon(download.status)}
-						<StatusIcon size={14} class={download.status === 'in-progress' ? 'spinning' : ''} />
+							<StatusIcon size={14} class={download.status === 'in-progress' ? 'spinning' : ''} />
 					</Button>
 					{#if download.externalId}
 						<Button
