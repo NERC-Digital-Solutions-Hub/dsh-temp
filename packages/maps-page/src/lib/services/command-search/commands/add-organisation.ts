@@ -3,7 +3,7 @@ import AddOrganisation from '$lib/components/add-organisation.svelte';
 import { defineCommand } from '$lib/services/command-search/command-registry';
 import type { Component } from 'svelte';
 
-const addOrganisationCommand: MapCommand = {
+export const addOrganisationCommand: MapCommand = {
 	id: 'add-organisation',
 	name: 'Add organisation',
 	description: 'Find and add an organisation to filter items by.',

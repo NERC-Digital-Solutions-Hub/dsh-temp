@@ -3,7 +3,7 @@ import AddWebMap from '$lib/components/add-web-map.svelte';
 import { defineCommand } from '$lib/services/command-search/command-registry';
 import type { Component } from 'svelte';
 
-const addWebMapCommand: MapCommand = {
+export const addWebMapCommand: MapCommand = {
 	id: 'add-web-map',
 	name: 'Add web map',
 	description: 'Fetch and display web maps.',

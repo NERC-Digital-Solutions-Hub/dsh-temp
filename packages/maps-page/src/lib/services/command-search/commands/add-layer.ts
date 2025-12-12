@@ -3,7 +3,7 @@ import AddLayer from '$lib/components/add-layer.svelte';
 import { defineCommand } from '$lib/services/command-search/command-registry';
 import type { Component } from 'svelte';
 
-const addLayerCommand: MapCommand = {
+export const addLayerCommand: MapCommand = {
 	id: 'add-layer',
 	name: 'Add layers',
 	description: 'Fetch and display layers.',

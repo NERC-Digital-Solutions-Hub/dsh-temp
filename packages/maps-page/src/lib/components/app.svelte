@@ -14,11 +14,18 @@
 	import Color from '@arcgis/core/Color';
 	import ColorBackground from '@arcgis/core/webmap/background/ColorBackground';
 
-	// import commands
-	import '$lib/services/command-search/commands/add-web-map';
-	import '$lib/services/command-search/commands/add-layer';
-	import '$lib/services/command-search/commands/add-organisation';
-	import '$lib/services/command-search/commands/clear-map';
+	import { addWebMapCommand } from '$lib/services/command-search/commands/add-web-map';
+	import { addLayerCommand } from '$lib/services/command-search/commands/add-layer';
+	import { addOrganisationCommand } from '$lib/services/command-search/commands/add-organisation';
+	import { clearMapCommand } from '$lib/services/command-search/commands/clear-map';
+
+	export const allCommands = [
+	addWebMapCommand,
+	addLayerCommand,
+	addOrganisationCommand,
+	clearMapCommand
+	] as const;
+
 
 	const commandSearchContext = new CommandSearchContext();
 
@@ -29,8 +36,6 @@
 	let arcgisLayerListComponent: HTMLArcgisLayerListElement | null = $state(null);
 
 	let isOpen: boolean = $state(true);
-
-	let commands: MapCommand[] = $state([]);
 
 	onMount(async () => {
 		if (!browser) {
@@ -44,13 +49,6 @@
 		commandSearchContext.add(OrganisationCommandService, organisationService);
 
 		await mountArcGisComponents();
-
-		commands = [
-			getCommand('add-web-map')!,
-			getCommand('add-layer')!,
-			getCommand('add-organisation')!,
-			getCommand('clear-map')!
-		];
 	});
 
 	async function getMapsConfig(): Promise<MapsConfig> {
@@ -122,13 +120,13 @@
 			zoom="15"
 			onarcgisViewReadyChange={handleViewReady}
 		>
-			{#if commands.length > 0}
+			{#if allCommands.length > 0}
 				<div id="search-slot" class="absolute top-3 left-1/2 z-10 -translate-x-1/2">
 					<CommandSearch
 						bind:ref={commandSearchElement}
 						class="w-full max-w-md"
 						{commandSearchContext}
-						{commands}
+						commands={allCommands}
 					/>
 				</div>
 			{/if}

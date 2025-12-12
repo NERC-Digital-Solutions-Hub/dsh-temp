@@ -2,7 +2,7 @@ import type { MapCommand, MapCommandRuntime } from '$lib/types/maps';
 import { defineCommand } from '$lib/services/command-search/command-registry';
 import { MapViewService } from '$lib/services/command-search/map-view-service';
 
-const clearMapCommand: MapCommand = {
+export const clearMapCommand: MapCommand = {
 	id: 'clear-map',
 	name: 'Clear map',
 	description: 'Clear all layers and reset the map view.',
