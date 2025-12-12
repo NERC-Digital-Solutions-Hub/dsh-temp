@@ -82,6 +82,11 @@
 	const registry = $derived.by(() => {
 		const deduped = new Map<string, MapCommand>();
 		for (const command of providedCommands) {
+			if(!command.id) {
+				console.warn('Command is missing an id and will be skipped:', command);
+				continue;
+			}
+			
 			deduped.set(command.id, command);
 		}
 		return Array.from(deduped.values());
