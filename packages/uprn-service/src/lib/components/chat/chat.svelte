@@ -71,6 +71,9 @@
 	/** Reference to the form input element */
 	let formElement: HTMLFormElement | null = $state(null);
 
+	/** Reference to the input element */
+	let inputRef: HTMLInputElement | null = $state(null);
+
 	/** Reference to the message wrapper element for dynamic padding */
 	let messageWrapper: HTMLDivElement | null = $state(null);
 
@@ -122,7 +125,6 @@
 	 * Automatically scrolls to the bottom when messages change or streaming updates occur.
 	 */
 	$effect(() => {
-		// Track dependencies: messages array and streaming message
 		messages.length;
 		streamingMessage;
 
@@ -215,40 +217,32 @@
 	async function handleSubmit(event: SubmitEvent): Promise<void> {
 		event.preventDefault();
 
-		// Validate input
 		if (!message.trim() || isLoading) {
 			return;
 		}
 
-		// Store and clear the user's message
 		const userMessage = message.trim();
 		message = '';
 
-		// Add user's message to chat
 		addMessage(userMessage, USER_SENDER_ID);
 
-		// Initialize loading state
 		isLoading = true;
 		streamingMessage = '';
 
 		try {
-			// Call the AI service with streaming callback
 			const success = await aiUprnChatbotService.chatStream(userMessage, handleStreamChunk);
 
-			// Add the AI response to chat history
 			if (success && streamingMessage) {
 				addMessage(streamingMessage, BOT_SENDER_ID);
 			} else {
-				// Handle error case
 				addMessage(ERROR_MESSAGE, BOT_SENDER_ID);
 			}
 		} catch (error) {
-			// Handle unexpected errors
 			console.error('Chat error:', error);
 			addMessage(ERROR_MESSAGE, BOT_SENDER_ID);
 		} finally {
-			// Always reset loading state
 			resetLoadingState();
+			setTimeout(() => inputRef?.focus(), 0);
 		}
 	}
 </script>
@@ -261,7 +255,6 @@
 	<div class="message-wrapper" bind:this={messageWrapper}>
 		<ScrollArea class="h-full w-full" bind:ref={scrollContainer}>
 			<Chat.List>
-				<!-- Chat Messages -->
 				{#each messages as m (m)}
 					<Chat.Bubble variant={m.senderId === USER_SENDER_ID ? 'sent' : 'received'}>
 						<Chat.BubbleAvatar />
@@ -274,7 +267,6 @@
 					</Chat.Bubble>
 				{/each}
 
-				<!-- Streaming Response Indicator -->
 				{#if isLoading}
 					<Chat.Bubble variant="received">
 						<Chat.BubbleAvatar />
@@ -292,13 +284,13 @@
 	</div>
 
 	<div class="input-wrapper">
-		<!-- Message Input Form -->
 		<form
 			bind:this={formElement}
 			onsubmit={handleSubmit}
 			class="flex shrink-0 items-center gap-2 border-t border-border bg-background p-2"
 		>
 			<Input
+				bind:ref={inputRef}
 				bind:value={message}
 				class="rounded-full"
 				placeholder="Type a message..."
@@ -318,7 +310,6 @@
 </div>
 
 <style>
-	/* Position chat fixed at the bottom of the sidebar */
 	.chat-container {
 		position: relative;
 		height: 100%;
@@ -341,7 +332,6 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		/* padding-bottom is set dynamically via JavaScript */
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
