@@ -23,6 +23,7 @@
 	import Download from '@lucide/svelte/icons/download';
 	import { onMount } from 'svelte';
 	import SelectionEntryCard from '$lib/components/selection-entry-card/selection-entry-card.svelte';
+	import { error } from 'console';
 
 	type Props = {
 		webMapStore: WebMapStore;
@@ -33,6 +34,7 @@
 	const { webMapStore, uprnDownloadService, fieldsToHide }: Props = $props();
 
 	let copiedUrls = $state<Set<string>>(new Set()); // track which URLs have been recently copied
+		let errorMessage = $state<string | null>(null);
 	const downloads = $derived.by(() => downloadsStore.getDownloads());
 
 	/**
@@ -98,6 +100,7 @@
 
 					if (!response || response.type === JobRequestResponseType.Error) {
 						download.status = DownloadStatus.Failed;
+						errorMessage = response?.message || 'Unknown error occurred while submitting download request.';
 						downloadsStore.updateDownloadStatus(download);
 						continue;
 					}
@@ -283,8 +286,8 @@
 						>
 							<Download />
 						</Button>
-					{:else if download.externalId && download.status === 'failed'}
-						<p class="text-sm text-red-600 ml-2">Download failed. Please try again.</p>
+					{:else if download.externalId && download.status === 'failed' && errorMessage}
+						<p class="text-sm text-red-600 ml-2">{errorMessage}</p>
 					{/if}
 					<Button
 						variant="ghost"
