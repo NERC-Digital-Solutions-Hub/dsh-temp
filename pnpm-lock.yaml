@@ -80,6 +80,9 @@ importers:
       globals:
         specifier: ^16.5.0
         version: 16.5.0
+      playwright-core:
+        specifier: ^1.57.0
+        version: 1.57.0
       prettier:
         specifier: ^3.6.2
         version: 3.7.4
@@ -92,6 +95,9 @@ importers:
       publint:
         specifier: ^0.3.15
         version: 0.3.15
+      rehype-mermaid:
+        specifier: ^3.0.0
+        version: 3.0.0(playwright@1.57.0)
       svelte:
         specifier: ^5.43.8
         version: 5.45.8
@@ -6416,8 +6422,7 @@ snapshots:
       mlly: 1.8.0
       pathe: 2.0.3
 
-  playwright-core@1.57.0:
-    optional: true
+  playwright-core@1.57.0: {}
 
   playwright@1.57.0:
     dependencies:
