@@ -11,6 +11,8 @@
 	import { ScrollArea } from '$lib/components/shadcn/scroll-area';
 	import { MapViewService } from '$lib/services/command-search/map-view-service';
 	import { getCommand } from '$lib/services/command-search/command-registry';
+	import Color from '@arcgis/core/Color';
+	import ColorBackground from '@arcgis/core/webmap/background/ColorBackground';
 
 	// import commands
 	import '$lib/services/command-search/commands/add-web-map';
@@ -71,8 +73,10 @@
 		mapView = arcgisMapComponent.view as __esri.MapView;
 		commandSearchContext.add(MapViewService, new MapViewService(mapView));
 
-		const backgroundColour = '#cfd3d4' as unknown as __esri.Color;
-		arcgisMapComponent.background = { color: backgroundColour };
+		const backgroundColour = new Color('#cfd3d4');
+		arcgisMapComponent.background = new ColorBackground({
+			color: backgroundColour
+		});
 
 		if (arcgisLayerListComponent) {
 			arcgisLayerListComponent.view = mapView;
