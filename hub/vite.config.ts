@@ -3,6 +3,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	cacheDir: '.vite',
 	plugins: [tailwindcss(), sveltekit()],
 	define: {
 		__dirname: 'import.meta.dirname'

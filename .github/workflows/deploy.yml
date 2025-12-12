@@ -2,7 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: ['main']
+    paths:
+      - 'hub/**'
+      - 'packages/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
   workflow_dispatch:
 
 permissions:
@@ -11,7 +17,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -19,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_OPTIONS: --max-old-space-size=6144
-      PNPM_WORKSPACE_CONCURRENCY: 1
+      BASE_PATH: '/${{ github.event.repository.name }}'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,13 +43,23 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # Cache Vite + (optional) SvelteKit intermediate output
+      - name: Cache build caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            hub/.vite
+            hub/.svelte-kit
+          key: ${{ runner.os }}-hub-${{ hashFiles('pnpm-lock.yaml', 'hub/vite.config.*', 'hub/svelte.config.*') }}
+          restore-keys: |
+            ${{ runner.os }}-hub-
 
-      - name: Build
-        env:
-          BASE_PATH: "/${{ github.event.repository.name }}"
-        run: pnpm build
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      # Build ONLY hub + its workspace dependencies
+      - name: Build (hub + deps)
+        run: pnpm -r --filter "./hub..." run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
