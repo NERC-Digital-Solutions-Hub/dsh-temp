@@ -23,7 +23,6 @@
 	import Download from '@lucide/svelte/icons/download';
 	import { onMount } from 'svelte';
 	import SelectionEntryCard from '$lib/components/selection-entry-card/selection-entry-card.svelte';
-	import { error } from 'console';
 
 	type Props = {
 		webMapStore: WebMapStore;
