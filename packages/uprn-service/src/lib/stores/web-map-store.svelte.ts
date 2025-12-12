@@ -4,6 +4,7 @@ import WebMap from '@arcgis/core/WebMap';
 import PortalItem from '@arcgis/core/portal/PortalItem';
 import esriConfig from '@arcgis/core/config.js';
 import * as urlUtils from '@arcgis/core/core/urlUtils.js';
+import { getSublayerId } from '$lib/utils/treeview';
 export type WebMapStoreParams = {
 	portalUrl?: string | null;
 	itemId: string;
@@ -21,14 +22,24 @@ export type Proxy = {
 export class WebMapStore {
 	public isLoaded: boolean = $state(false);
 	public data: __esri.WebMap | null = $state<__esri.WebMap | null>(null);
-	public dataLookup: SvelteMap<string, __esri.Layer> = $derived.by(() => {
-		const map = new SvelteMap<string, __esri.Layer>();
-		function addLayerRecursively(layer: __esri.Layer) {
-			map.set(layer.id, layer);
+	public dataLookup: SvelteMap<string, __esri.Layer | __esri.Sublayer> = $derived.by(() => {
+		const map = new SvelteMap<string, __esri.Layer | __esri.Sublayer>();
+		function addLayerRecursively(layer: __esri.Layer | __esri.Sublayer) {
+			const layerId =
+				layer.type === 'sublayer' ? getSublayerId(layer, layer.parent as __esri.Layer) : layer.id;
+
+			map.set(layerId, layer);
 			if (layer.type === 'group') {
 				const groupLayer = layer as __esri.GroupLayer;
 				groupLayer.layers.forEach((lyr) => {
 					addLayerRecursively(lyr);
+				});
+			}
+
+			if (layer.type === 'map-image') {
+				const mapImageLayer = layer as __esri.MapImageLayer;
+				mapImageLayer.sublayers?.forEach((sublayer) => {
+					addLayerRecursively(sublayer);
 				});
 			}
 		}

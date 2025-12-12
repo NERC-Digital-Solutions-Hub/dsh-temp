@@ -2,6 +2,8 @@
 <script lang="ts">
 	import { Funnel as FilterEnabledIcon } from '@lucide/svelte';
 	import { FunnelX as FilterDisabledIcon } from '@lucide/svelte';
+	import type { Component } from 'svelte';
+	import { Icon } from 'svelte-sonner';
 
 	/**
 	 * Props for the FilterButton component.
@@ -18,16 +20,12 @@
 	/** Destructured props. */
 	const { layerId, onFilterClicked, hasFiltersApplied }: Props = $props();
 
-	/** Reactive state for whether filters are active. */
-	let isActive = $state(hasFiltersApplied?.(layerId) ?? false);
+	let isActive = $derived(hasFiltersApplied?.(layerId) ?? false);
 
 	// Update active state when filters change
 	$effect(() => {
 		isActive = hasFiltersApplied?.(layerId) ?? false;
 	});
-
-	/** Derived icon markup based on active state. */
-	const iconMarkup = $derived(isActive ? FilterEnabledIcon : FilterDisabledIcon);
 
 	/**
 	 * Handles click events on the filter button.
@@ -47,7 +45,11 @@
 	aria-pressed={isActive}
 	title="Filter"
 >
-	{@html iconMarkup}
+{#if isActive}
+	<FilterEnabledIcon />
+{:else}
+	<FilterDisabledIcon />
+{/if}
 </button>
 
 <style>

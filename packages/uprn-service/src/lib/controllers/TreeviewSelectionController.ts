@@ -78,7 +78,7 @@ export class TreeviewSelectionController {
 			return this.determineSelectionStateFromChildren(node);
 		}
 
-		if (this.isGroupLayer(node)) {
+		if (this.isGroupLayer(node) || this.hasSublayers(node)) {
 			return this.determineSelectionStateFromChildren(node);
 		}
 
@@ -123,7 +123,7 @@ export class TreeviewSelectionController {
 
 		switch (state) {
 			case SelectionState.Active:
-				if (!selection && !this.isGroupLayer(node)) {
+				if (!selection && !this.isGroupLayer(node) && !this.hasSublayers(node)) {
 					selection = this.createAndAddDataSelection(node.id);
 				}
 
@@ -132,7 +132,7 @@ export class TreeviewSelectionController {
 				}
 				break;
 			case SelectionState.Inactive:
-				if (selection && !this.isGroupLayer(node)) {
+				if (selection && !this.isGroupLayer(node) && !this.hasSublayers(node)) {
 					this.#dataSelectionStore.removeSelection(node.id);
 				}
 
@@ -271,6 +271,25 @@ export class TreeviewSelectionController {
 	 */
 	private isGroupLayer(node: TreeNode): boolean {
 		return node instanceof TreeLayerNode && node.layer.type === 'group';
+	}
+
+	/**
+	 * Predicate that returns true when the provided node has sublayers.
+	 *
+	 * @param node - The TreeNode to test.
+	 * @returns True if the node is a TreeLayerNode with sublayers.
+	 */
+	private hasSublayers(node: TreeNode): boolean {
+		if (!(node instanceof TreeLayerNode)) return false;
+
+		// Check for MapImageLayer or WMSLayer
+		if (node.layer.type === 'map-image' || node.layer.type === 'wms') {
+			return true;
+		}
+
+		// Check for Sublayer with sublayers
+		const layer = node.layer as any;
+		return !!(layer.sublayers && layer.sublayers.length > 0);
 	}
 
 	/**

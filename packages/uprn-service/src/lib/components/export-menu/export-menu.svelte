@@ -173,6 +173,7 @@
 	{#if dataSelectionStore.getAllSelections().length > 0}
 		<ul>
 			{#each dataSelectionStore.getAllSelections() as data}
+			{console.log('[export-menu] Rendering data selection:', data)}
 				<SelectionEntryCard title={webMapStore.dataLookup.get(data.layerId)?.title ?? ''}>
 					{#if dataSelectionTreeviewConfig?.getItemConfig(data.layerId)?.showFields}
 						<FilterButton
