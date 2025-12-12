@@ -28,7 +28,7 @@
 	import { AiUprnChatbotService } from '$lib/services/ai-uprn-chatbot-service';
 	import { CustomRendererService } from '$lib/services/custom-renderer-service';
 	import CollapsibleWindow from '$lib/components/collapsible-window/collapsible-window.svelte';
-	import { base } from '$app/paths';
+	import { asset, base } from '$app/paths';
 	import { LayerViewProvider } from '$lib/services/layer-view-provider';
 	import { SelectionTrackingStore } from '$lib/stores/selection-tracking-store.svelte';
 	import OptionsDialog from '$lib/components/options-dialog/options-dialog.svelte';
@@ -253,7 +253,7 @@
 
 		if (currentMap.customRenderers) {
 			customRendererServiceReady = false;
-			const customRendererPath = currentMap.customRenderers;
+			const customRendererPath = asset(currentMap.customRenderers);
 			customRendererService
 				.init(customRendererPath)
 				.then(() => (customRendererServiceReady = true))
