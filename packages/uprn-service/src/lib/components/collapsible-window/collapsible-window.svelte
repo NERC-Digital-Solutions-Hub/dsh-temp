@@ -14,7 +14,7 @@
 	const { isOpenedOnInit: isOpenedOnInit = false, children }: Props = $props();
 
 	let isInitialised = $state<boolean>(false);
-	let isOpened = $state<boolean>(isOpenedOnInit);
+	let isOpened = $state<boolean>(false);
 	let isMaximised = $state<boolean>(false);
 
 	let cardElement = $state<HTMLElement | undefined>();
@@ -26,7 +26,8 @@
 			return;
 		}
 
-		if (isOpened) {
+		if (isOpenedOnInit) {
+			isOpened = true;
 			cardElement.style.height = lastExpandedWindowHeight;
 		}
 
@@ -95,10 +96,8 @@
 				</div>
 			</div>
 		</Card.Header>
-		{#if isOpened}
-			<Card.Content class="h-full min-h-[10px] w-full p-0">
-				{@render children?.()}
-			</Card.Content>
-		{/if}
+		<Card.Content class="h-full min-h-[10px] w-full p-0" hidden={!isOpened}>
+			{@render children?.()}
+		</Card.Content>
 	</Card.Root>
 </div>

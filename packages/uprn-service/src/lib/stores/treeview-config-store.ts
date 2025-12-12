@@ -5,7 +5,10 @@ import {
 	type TreeviewNodeConfig,
 	type VisibilityGroupConfig
 } from '$lib/types/treeview';
-import { getLayerTreeviewItemType } from '$lib/utils/treeview';
+import {
+	getLayerTreeviewItemType,
+	getSublayerIdFromParentId
+} from '$lib/utils/treeview';
 import Sublayer from '@arcgis/core/layers/support/Sublayer';
 
 /**
@@ -150,7 +153,10 @@ export class TreeviewConfigStore {
 		layer: __esri.Layer | __esri.Sublayer,
 		parentNodeConfig?: TreeviewNodeConfig
 	): TreeviewNodeConfig {
-		const layerId = layer instanceof Sublayer ? layer.uid : layer.id;
+		const layerId =
+			layer instanceof Sublayer
+				? getSublayerIdFromParentId(layer, parentNodeConfig?.id ?? '')
+				: layer.id;
 
 		const nodeConfig: TreeviewNodeConfig = this.#getOrCreateNodeConfig(layerId, parentNodeConfig);
 

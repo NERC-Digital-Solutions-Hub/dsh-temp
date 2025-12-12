@@ -14,6 +14,7 @@ export type PortalItemConfig = {
 	portalUrl?: string | null;
 	portalItemId: string;
 	proxy?: Proxy | null;
+	customRenderers?: string;
 	areaTreeview?: TreeviewConfig;
 	dataTreeview?: TreeviewConfig;
 	selectableLayers?: { _name: string; id: string; nameField: string; codeField: string }[];

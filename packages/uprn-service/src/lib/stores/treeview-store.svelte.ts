@@ -13,6 +13,7 @@ import type { LayerViewProvider } from '$lib/services/layer-view-provider';
 import Layer from '@arcgis/core/layers/Layer';
 import LayerView from '@arcgis/core/views/layers/LayerView';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import { getSublayerId } from '$lib/utils/treeview';
 
 export class TreeviewStore {
 	public initialized: boolean = $state<boolean>(false);
@@ -560,7 +561,7 @@ export class TreeviewStore {
 	 * @returns The created tree node
 	 */
 	#sublayerToNode(subLayer: __esri.Sublayer, parent?: TreeLayerNode): TreeLayerNode {
-		const layerId = subLayer.uid;
+		const layerId = getSublayerId(subLayer, parent?.layer as __esri.Layer);
 
 		const node = new TreeLayerNode(layerId, subLayer.title as string, subLayer, [], parent);
 		if (subLayer.sublayers?.length) {

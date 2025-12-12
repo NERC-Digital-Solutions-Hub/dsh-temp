@@ -22,6 +22,7 @@ type CustomRendererSymbolWithAppearances = CustomRendererSymbol & {
 export class CustomRendererService {
 	#data: CustomRenderers = null!;
 	#isInitialised: boolean = false;
+	#currentPath: string | null = null;
 
 	async init(path: string) {
 		if (!browser) {
@@ -31,12 +32,13 @@ export class CustomRendererService {
 			return;
 		}
 
-		if (this.#isInitialised) {
+		if (this.#isInitialised && this.#currentPath === path) {
 			return;
 		}
 
 		await this.#loadJsonData(path);
 		this.#isInitialised = true;
+		this.#currentPath = path;
 	}
 
 	async #loadJsonData(path: string) {

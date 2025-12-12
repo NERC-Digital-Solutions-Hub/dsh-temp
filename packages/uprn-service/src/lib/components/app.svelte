@@ -80,7 +80,8 @@
 	let mapView: __esri.MapView | null = $state(null);
 	let dataSelectionTreeviewConfig: TreeviewConfigStore | undefined = $state();
 	let areaSelectionTreeviewConfig: TreeviewConfigStore | undefined = $state();
-	let customRendererService: CustomRendererService | undefined = $state();
+	let customRendererService = new CustomRendererService();
+	let customRendererServiceReady = $state(false);
 
 	let uprnDownloadApi = $derived(
 		uprnConfigStore.instance?.uprnDownloadApiConfig.value
@@ -200,10 +201,6 @@
 	onMount(async () => {
 		//await clearDatabase();
 
-		customRendererService = new CustomRendererService();
-		await customRendererService.init(`${base}/custom-renderers.json`);
-		console.log('[uprn-2/page] CustomRendererService initialized');
-
 		try {
 			await uprnConfigStore.load(`${base}/config/apps/uprn/config.json`);
 		} catch (error) {
@@ -253,6 +250,15 @@
 		}
 
 		console.log(`[uprn-2/page] Loading map ${currentMapIndex + 1} of ${maps.length}`);
+
+		if (currentMap.customRenderers) {
+			customRendererServiceReady = false;
+			const customRendererPath = currentMap.customRenderers;
+			customRendererService
+				.init(customRendererPath)
+				.then(() => (customRendererServiceReady = true))
+				.catch((e) => console.error('[uprn-2/page] Failed to load custom renderers', e));
+		}
 
 		selectionTrackingStore.portalItemId = currentMap.portalItemId || null;
 
@@ -342,7 +348,7 @@
 
 				<div hidden={currentTab !== 'select-data'}>
 					<UprnTabBarContent>
-						{#if webMapStore.isLoaded}
+						{#if webMapStore.isLoaded && customRendererServiceReady}
 							<DataSelectionTreeview
 								bind:this={dataSelectionTreeview}
 								webMap={webMapStore.data!}
