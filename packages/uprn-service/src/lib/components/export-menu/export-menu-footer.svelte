@@ -28,6 +28,13 @@
 		dataSelectionStore
 	}: Props = $props();
 
+	const areRequirementsMet = $derived.by(() => {
+		return (
+			areaSelectionInteractionStore.selectionViewState?.areaHandles.size > 0 &&
+			dataSelectionStore.getAllSelections().length > 0
+		);
+	});
+
 	let coolingDown: boolean = $state(false);
 	let cooldownTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -113,7 +120,12 @@
 
 	<div class="export-footer__right">
 		<ClearSelectionsButton class="mr-4" clear={clearSelections} />
-		<Button disabled={coolingDown} onclick={handleExportClick} title="Export">
+		<Button
+			variant={areRequirementsMet ? 'default' : 'outline'}
+			disabled={coolingDown}
+			onclick={handleExportClick}
+			title="Export"
+		>
 			{#if coolingDown}
 				<Spinner />
 			{:else}
