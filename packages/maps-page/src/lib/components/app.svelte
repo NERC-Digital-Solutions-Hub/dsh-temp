@@ -16,16 +16,15 @@
 
 	import { addWebMapCommand } from '$lib/services/command-search/commands/add-web-map';
 	import { addLayerCommand } from '$lib/services/command-search/commands/add-layer';
-	import { addOrganisationCommand } from '$lib/services/command-search/commands/add-organisation';
+	import { selectOrganisationCommand } from '$lib/services/command-search/commands/select-organisation';
 	import { clearMapCommand } from '$lib/services/command-search/commands/clear-map';
 
 	export const allCommands = [
-	addWebMapCommand,
-	addLayerCommand,
-	addOrganisationCommand,
-	clearMapCommand
-	] as const;
-
+		addWebMapCommand,
+		addLayerCommand,
+		selectOrganisationCommand,
+		clearMapCommand
+	];
 
 	const commandSearchContext = new CommandSearchContext();
 

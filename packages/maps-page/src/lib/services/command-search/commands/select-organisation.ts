@@ -1,16 +1,16 @@
 import type { MapCommand, MapCommandRuntime } from '$lib/types/maps';
-import AddOrganisation from '$lib/components/add-organisation.svelte';
+import SelectOrganisation from '$lib/components/select-organisation.svelte';
 import { defineCommand } from '$lib/services/command-search/command-registry';
 import type { Component } from 'svelte';
 
-export const addOrganisationCommand: MapCommand = {
-	id: 'add-organisation',
-	name: 'Add organisation',
-	description: 'Find and add an organisation to filter items by.',
+export const selectOrganisationCommand: MapCommand = {
+	id: 'select-organisation',
+	name: 'Select organisation',
+	description: 'Select an organisation to filter items by.',
 	group: 'Maps',
 	shortcut: ['Ctrl', 'O'],
 	inputPlaceholder: 'Search organisations...',
-	component: AddOrganisation as Component,
+	component: SelectOrganisation as Component,
 	execute: async () => {},
 	props: (_runtime: MapCommandRuntime) => ({
 		commandSearchContext: _runtime.getContext(),
@@ -18,4 +18,4 @@ export const addOrganisationCommand: MapCommand = {
 	})
 };
 
-defineCommand('add-organisation', addOrganisationCommand);
+defineCommand('select-organisation', selectOrganisationCommand);
