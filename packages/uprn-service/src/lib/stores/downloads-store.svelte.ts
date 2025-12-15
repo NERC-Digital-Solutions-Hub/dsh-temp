@@ -6,7 +6,7 @@ import {
 	updateUserDownload
 } from '$lib/db';
 import { browser } from '$app/environment';
-import { type DownloadEntry, DownloadStatus } from '$lib/types/uprn';
+import { type DownloadEntry } from '$lib/types/uprn';
 
 /**
  * Store for managing the current downloads.
@@ -49,11 +49,12 @@ class DownloadsStore {
 			return;
 		}
 
-		console.log('Loaded downloads from DB:', storedDownloads);
+		console.log('[downloads-store] Loaded downloads from DB:', storedDownloads);
 		storedDownloads.forEach((download) => {
 			this.#downloads.set(download.localId, {
 				localId: download.localId,
-				status: DownloadStatus.Pending,
+				externalId: download.externalId,
+				status: download.status,
 				areaSelection: download.areaSelection,
 				dataSelections: download.dataSelections
 			});

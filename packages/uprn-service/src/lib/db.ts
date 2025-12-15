@@ -9,7 +9,7 @@ import {
 import Dexie, { type Table } from 'dexie';
 
 export interface DbUprnSelection {
-	id: string;
+	portalItemId: string;
 	areas: DbUprnAreaSelectionInfo | null;
 	data: DbUprnDataSelectionInfo[];
 }
@@ -27,8 +27,6 @@ export interface DbUserDownload extends DownloadEntry {
 	createdAt: number;
 }
 
-//export const UPRN_SELECTION_ID = 'current';
-
 class AppDB extends Dexie {
 	uprnSelections!: Table<DbUprnSelection, string>;
 	areaSelections!: Table<DbUprnAreaSelectionInfo, number>;
@@ -37,30 +35,12 @@ class AppDB extends Dexie {
 
 	constructor() {
 		super('app-db2');
-
-		// Version 3 schema
-		this.version(3).stores({
-			uprnSelections: '&id',
+		this.version(4).stores({
+			uprnSelections: '&portalItemId',
 			areaSelections: '++id, layerId, *areaIds',
 			dataSelections: '++id, layerId, *fields',
 			userDownloads: '++id, &localId, createdAt'
 		});
-
-		// this.on('populate', async (tx) => {
-		// 	console.log('[db] Populating database with initial data');
-		// 	if (await tx.table<DbUprnSelection>('uprnSelections').get(UPRN_SELECTION_ID)) {
-		// 		console.log('[db] Initial UPRN selection already exists');
-		// 		return; // already exists
-		// 	}
-
-		// 	await tx.table<DbUprnSelection>('uprnSelections').add({
-		// 		id: 'current',
-		// 		areas: null,
-		// 		data: []
-		// 	});
-
-		// 	console.log('[db] Initial UPRN selection created');
-		// });
 	}
 }
 
@@ -71,7 +51,7 @@ export const getSelection = async (portalItemId: string): Promise<DbUprnSelectio
 
 	if (!selection) {
 		selection = {
-			id: portalItemId,
+			portalItemId: portalItemId,
 			areas: null,
 			data: []
 		};
@@ -88,25 +68,16 @@ export const updateSelection = async (
 	let current = await db.uprnSelections.get(portalItemId);
 
 	if (!current) {
-		current = { id: portalItemId, areas: null, data: [] };
+		current = { portalItemId: portalItemId, areas: null, data: [] };
 		await db.uprnSelections.add(current);
 	}
-
-	console.log(
-		'[db] Updating UPRN selection with patch:',
-		patch,
-		'for portalItemId:',
-		portalItemId,
-		'current:',
-		current
-	);
 
 	await db.uprnSelections.update(portalItemId, patch);
 };
 
 export const clearSelections = async (portalItemId: string) => {
 	await db.uprnSelections.put({
-		id: portalItemId,
+		portalItemId: portalItemId,
 		areas: null,
 		data: []
 	});
