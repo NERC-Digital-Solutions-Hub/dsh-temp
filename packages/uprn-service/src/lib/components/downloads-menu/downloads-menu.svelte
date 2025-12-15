@@ -7,6 +7,7 @@
 	import ClipboardCheckIcon from '@lucide/svelte/icons/clipboard-check';
 	import LoaderIcon from '@lucide/svelte/icons/loader';
 	import XCircleIcon from '@lucide/svelte/icons/x-circle';
+	import RetryIcon from '@lucide/svelte/icons/rotate-ccw';
 	import { toast } from 'svelte-sonner';
 	import { page } from '$app/stores';
 	import type { UprnDownloadService } from '$lib/services/uprn-download-service';
@@ -202,6 +203,20 @@
 	}
 
 	/**
+	 * Retries a failed download by resetting its status to Pending.
+	 * @param localId - The local ID of the download to retry.
+	 */
+	function retryDownload(localId: string) {
+		const download = downloads.find((d) => d.localId === localId);
+		if (download) {
+			download.status = DownloadStatus.Pending;
+			download.externalId = undefined; // Clear external ID to force new submission
+			errorMessage = null; // Clear error message
+			downloadsStore.updateDownloadStatus(download);
+		}
+	}
+
+	/**
 	 * Removes a download from the queue by its local ID.
 	 * @param localId - The local ID of the download to remove.
 	 */
@@ -315,6 +330,17 @@
 					{:else if download.externalId && download.status === 'failed' && errorMessage}
 						<p class="text-sm text-red-600 ml-2">{errorMessage}</p>
 					{/if}
+					{#if download.status === 'failed'}
+						<Button
+							variant="ghost"
+							size="sm"
+							class="download-retry-btn"
+							onclick={() => retryDownload(download.localId)}
+							title="Retry download"
+						>
+							<RetryIcon size={14} />
+						</Button>
+					{/if}
 					<Button
 						variant="ghost"
 						size="sm"
@@ -370,6 +396,7 @@
 	:global(.download-action-btn),
 	:global(.download-clipboard-btn),
 	:global(.download-status-btn),
+	:global(.download-retry-btn),
 	:global(.download-remove-btn) {
 		height: 1.5rem;
 		width: 1.5rem;
@@ -402,6 +429,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	:global(.download-retry-btn:hover) {
+		color: #2563eb;
 	}
 
 	:global(.download-remove-btn:hover) {
