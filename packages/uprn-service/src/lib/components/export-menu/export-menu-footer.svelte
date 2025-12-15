@@ -11,6 +11,8 @@
 	import ClearSelectionsButton from '$lib/components/clear-selections-button/cl/clear-selections-button.svelte';
 	import type { AreaSelectionInteractionStore } from '$lib/stores/area-selection-interaction-store.svelte';
 	import { DataSelectionStore } from '$lib/stores/data-selection-store.svelte';
+	import { onDestroy } from 'svelte';
+	import Spinner from '$lib/components/shadcn/spinner/spinner.svelte';
 
 	type Props = {
 		onExportSuccess?: () => void;
@@ -25,6 +27,17 @@
 		areaSelectionInteractionStore,
 		dataSelectionStore
 	}: Props = $props();
+
+	let coolingDown: boolean = $state(false);
+	let cooldownTimer: ReturnType<typeof setTimeout> | null = null;
+
+	const cooldownDuration = 1000; // 1 second cooldown
+
+	onDestroy(() => {
+		if (cooldownTimer) {
+			clearTimeout(cooldownTimer);
+		}
+	});
 
 	// TODO: Add onExport function prop to handle export completion externally
 
@@ -42,6 +55,9 @@
 			toast.error('Please select at least one data layer to export.');
 			return;
 		}
+
+		coolingDown = true;
+		cooldownTimer = setTimeout(() => (coolingDown = false), cooldownDuration);
 
 		console.log('Starting export...');
 
@@ -97,7 +113,13 @@
 
 	<div class="export-footer__right">
 		<ClearSelectionsButton class="mr-4" clear={clearSelections} />
-		<Button onclick={handleExportClick} title="Export">Export</Button>
+		<Button disabled={coolingDown} onclick={handleExportClick} title="Export">
+			{#if coolingDown}
+				<Spinner />
+			{:else}
+				Export
+			{/if}
+		</Button>
 	</div>
 </div>
 
