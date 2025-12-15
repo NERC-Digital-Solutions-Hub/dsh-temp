@@ -52,11 +52,13 @@
 </script>
 
 <div class="sidebar-layout" class:vertical={isVertical}>
-	<Sidebar {isOpen} {onToggle} {position} {originalSize} {minSize} {openIcon} {hideToggleButton}>
-		{#if sidebarContent}
-			{@render sidebarContent()}
-		{/if}
-	</Sidebar>
+	<div class="z-10">
+		<Sidebar {isOpen} {onToggle} {position} {originalSize} {minSize} {openIcon} {hideToggleButton}>
+			{#if sidebarContent}
+				{@render sidebarContent()}
+			{/if}
+		</Sidebar>
+	</div>
 
 	<div class="main-content">
 		{#if mainContent}
