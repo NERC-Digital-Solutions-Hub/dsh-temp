@@ -171,7 +171,7 @@
 
 	function setMapIndex(index: number) {
 		if (index < 0 || index >= maps.length) {
-			console.warn(`[uprn-2/page] Invalid map index: ${index}`);
+			console.warn(`[uprn/page] Invalid map index: ${index}`);
 			return;
 		}
 
@@ -187,7 +187,7 @@
 	}
 
 	function clearAllSelections() {
-		console.log('[uprn-2/page] Clearing all selections');
+		console.log('[uprn/page] Clearing all selections');
 		areaSelectionStore.setLayerId(null);
 		areaSelectionStore.clearSelectedAreas();
 		dataSelectionStore.clearSelections();
@@ -204,7 +204,7 @@
 		try {
 			await uprnConfigStore.load(`${base}/config/apps/uprn/config.json`);
 		} catch (error) {
-			console.error('[uprn-2/page] Failed to load UPRN config', error);
+			console.error('[uprn/page] Failed to load UPRN config', error);
 		}
 
 		const { default: MapView } = await import('@arcgis/core/views/MapView');
@@ -220,8 +220,8 @@
 		if (uprnDownloadApi) {
 			uprnDownloadApi.getHealth().then((available) => {
 				isUprnDownloadServiceAvailable = available;
-				if (available) console.log('[uprn-2/page] UPRN Download Service is available');
-				else console.warn('[uprn-2/page] UPRN Download Service is NOT available');
+				if (available) console.log('[uprn/page] UPRN Download Service is available');
+				else console.warn('[uprn/page] UPRN Download Service is NOT available');
 			});
 		} else {
 			isUprnDownloadServiceAvailable = false;
@@ -232,8 +232,8 @@
 		if (aiUprnChatbotApi) {
 			aiUprnChatbotApi.getHealth().then((available) => {
 				isAiUprnChatbotServiceAvailable = available;
-				if (available) console.log('[uprn-2/page] AI UPRN Chatbot Service is available');
-				else console.warn('[uprn-2/page] AI UPRN Chatbot Service is NOT available');
+				if (available) console.log('[uprn/page] AI UPRN Chatbot Service is available');
+				else console.warn('[uprn/page] AI UPRN Chatbot Service is NOT available');
 			});
 		} else {
 			isAiUprnChatbotServiceAvailable = false;
@@ -249,7 +249,7 @@
 			return;
 		}
 
-		console.log(`[uprn-2/page] Loading map ${currentMapIndex + 1} of ${maps.length}`);
+		console.log(`[uprn/page] Loading map ${currentMapIndex + 1} of ${maps.length}`);
 
 		if (currentMap.customRenderers) {
 			customRendererServiceReady = false;
@@ -257,7 +257,7 @@
 			customRendererService
 				.init(customRendererPath)
 				.then(() => (customRendererServiceReady = true))
-				.catch((e) => console.error('[uprn-2/page] Failed to load custom renderers', e));
+				.catch((e) => console.error('[uprn/page] Failed to load custom renderers', e));
 		}
 
 		selectionTrackingStore.portalItemId = currentMap.portalItemId || null;
