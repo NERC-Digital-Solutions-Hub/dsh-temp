@@ -34,8 +34,8 @@ class AppDB extends Dexie {
 	userDownloads!: Table<DbUserDownload, number>;
 
 	constructor() {
-		super('app-db2');
-		this.version(4).stores({
+		super('uprn-service-db');
+		this.version(1).stores({
 			uprnSelections: '&portalItemId',
 			areaSelections: '++id, layerId, *areaIds',
 			dataSelections: '++id, layerId, *fields',
@@ -61,10 +61,7 @@ export const getSelection = async (portalItemId: string): Promise<DbUprnSelectio
 	return selection;
 };
 
-export const updateSelection = async (
-	portalItemId: string,
-	patch: Partial<DbUprnSelection>
-) => {
+export const updateSelection = async (portalItemId: string, patch: Partial<DbUprnSelection>) => {
 	let current = await db.uprnSelections.get(portalItemId);
 
 	if (!current) {
