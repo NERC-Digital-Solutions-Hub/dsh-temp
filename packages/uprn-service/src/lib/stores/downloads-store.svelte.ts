@@ -1,10 +1,5 @@
 import { SvelteMap } from 'svelte/reactivity';
-import {
-	addUserDownload,
-	deleteUserDownload,
-	getUserDownloads,
-	updateUserDownload
-} from '$lib/db';
+import { addUserDownload, deleteUserDownload, getUserDownloads, updateUserDownload } from '$lib/db';
 import { browser } from '$app/environment';
 import { type DownloadEntry } from '$lib/types/uprn';
 
@@ -18,7 +13,6 @@ class DownloadsStore {
 		if (!browser) {
 			return;
 		}
-		// Load existing downloads from the database
 		this.#loadDownloads();
 	}
 
@@ -31,7 +25,13 @@ class DownloadsStore {
 	updateDownloadStatus(entry: DownloadEntry) {
 		console.log('[downloads-store] Updating download status:', entry);
 		this.#downloads.set(entry.localId, { ...entry });
-		updateUserDownload(entry.localId, entry.externalId, entry.areaSelection, entry.dataSelections);
+		updateUserDownload(
+			entry.localId,
+			entry.externalId,
+			entry.status,
+			entry.areaSelection,
+			entry.dataSelections
+		);
 	}
 
 	removeDownload(localId: string) {

@@ -96,17 +96,21 @@ export const addUserDownload = async (
 export const updateUserDownload = async (
 	localId: string,
 	externalId?: string,
+	status?: DownloadStatus,
 	areaSelection?: AreaSelectionInfo,
 	dataSelections?: DataSelectionInfo[]
 ) => {
 	const update: Record<string, any> = {};
 	if (externalId !== undefined) update.externalId = externalId;
+	if (status !== undefined) update.status = status;
 	if (areaSelection !== undefined) update.areaSelection = areaSelection;
 	if (dataSelections !== undefined) update.dataSelections = dataSelections;
 
 	if (Object.keys(update).length === 0) {
 		return;
 	}
+
+	console.log('[db] Updating user download:', localId, update);
 
 	await db.userDownloads.where('localId').equals(localId).modify(update);
 };

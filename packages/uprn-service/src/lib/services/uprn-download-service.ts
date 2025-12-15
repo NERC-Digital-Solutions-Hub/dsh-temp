@@ -46,7 +46,7 @@ export class UprnDownloadService {
 			const response = await fetch(url);
 
 			if (!response.ok) {
-				return false;
+				throw new Error(`Health check failed: ${response.statusText}`);
 			}
 
 			const data: UprnDownloadHealthResponse = await response.json();
@@ -78,13 +78,7 @@ export class UprnDownloadService {
 			});
 
 			if (!response.ok) {
-				console.error(
-					'Failed to request job:',
-					response.statusText,
-					'request:',
-					JSON.stringify(request)
-				);
-				return undefined;
+				throw new Error(`Failed to request job: ${response.statusText}`);
 			}
 
 			const data: UprnDownloadJobRequestResponse = await response.json();
@@ -114,8 +108,7 @@ export class UprnDownloadService {
 			});
 
 			if (!response.ok) {
-				console.error('Failed to get job statuses:', response.statusText);
-				return undefined;
+				throw new Error(`Failed to get job statuses: ${response.statusText}`);
 			}
 
 			const data: UprnDownloadGetJobStatusesResult = await response.json();
@@ -138,8 +131,7 @@ export class UprnDownloadService {
 			const response = await fetch(url);
 
 			if (!response.ok) {
-				console.error('Failed to get area selection limits:', response.statusText);
-				return undefined;
+				throw new Error(`Failed to get selection area limits: ${response.statusText}`);
 			}
 
 			const data: UrpnDownloadAreaSelectionLimitResponse[] = await response.json();

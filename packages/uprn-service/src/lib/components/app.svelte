@@ -186,6 +186,21 @@
 		currentMapIndex = index;
 	}
 
+	/**
+	 * Checks the availability of the UPRN Download Service.
+	 */
+	function checkDownloadServiceAvailability() {
+		if (!uprnDownloadApi || isUprnDownloadServiceAvailable) {
+			return;
+		}
+
+		uprnDownloadApi.getHealth().then((available) => {
+			isUprnDownloadServiceAvailable = available;
+			if (available) console.log('[uprn/page] UPRN Download Service is available');
+			else console.warn('[uprn/page] UPRN Download Service is NOT available');
+		});
+	}
+
 	function clearAllSelections() {
 		console.log('[uprn/page] Clearing all selections');
 		areaSelectionStore.setLayerId(null);
@@ -214,6 +229,12 @@
 			areaSelectionStore,
 			new LayerViewProvider(mapView)
 		);
+	});
+
+	$effect(() => {
+		if (currentTab === 'downloads') {
+			checkDownloadServiceAvailability();
+		}
 	});
 
 	$effect(() => {

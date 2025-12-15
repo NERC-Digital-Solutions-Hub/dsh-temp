@@ -33,7 +33,7 @@
 	const { webMapStore, uprnDownloadService, fieldsToHide }: Props = $props();
 
 	let copiedUrls = $state<Set<string>>(new Set()); // track which URLs have been recently copied
-		let errorMessage = $state<string | null>(null);
+	let errorMessage = $state<string | null>(null);
 	const downloads = $derived.by(() => downloadsStore.getDownloads());
 
 	/**
@@ -47,6 +47,8 @@
 	} as const; // TODO: move into config file.
 
 	onMount(() => {
+		submitRequests();
+
 		const interval = setInterval(() => {
 			checkJobStatuses();
 		}, 5000); // Check every 5 seconds
@@ -66,73 +68,97 @@
 			return;
 		}
 
-		const submitRequests = async () => {
-			for (const download of downloads) {
-				if (download.externalId || download.status !== DownloadStatus.Pending) {
+		submitRequests();
+	});
+
+	async function submitRequests() {
+		for (const download of downloads) {
+			if (download.externalId || download.status !== DownloadStatus.Pending) {
+				continue;
+			}
+
+			download.status = DownloadStatus.InProgress;
+			downloadsStore.updateDownloadStatus(download);
+
+			const request: UprnDownloadJobRequest = {
+				exports: {
+					areaSelectionLayer: {
+						remoteId: download.areaSelection.layerId,
+						areas: download.areaSelection.areaFieldInfos.map((area) => area.code)
+					},
+					dataSelectionLayers: download.dataSelections.map((selection) => {
+						return {
+							remoteId: selection.layerId,
+							fields: selection.fields.filter((field) => !fieldsToHide || !fieldsToHide.has(field))
+						};
+					})
+				}
+			};
+
+			console.log('[downloads-menu] Submitting download request:', request);
+
+			try {
+				const response = await uprnDownloadService.requestJob(request);
+
+				if (!response || !response.guid || response.type !== JobRequestResponseType.Success) {
+					download.status = DownloadStatus.Failed;
+					errorMessage =
+						response?.message || 'Unknown error occurred while submitting download request.';
+					downloadsStore.updateDownloadStatus(download);
 					continue;
 				}
 
-				download.status = DownloadStatus.InProgress;
+				download.externalId = response.guid;
 				downloadsStore.updateDownloadStatus(download);
-
-				const request: UprnDownloadJobRequest = {
-					exports: {
-						areaSelectionLayer: {
-							remoteId: download.areaSelection.layerId,
-							areas: download.areaSelection.areaFieldInfos.map((area) => area.code)
-						},
-						dataSelectionLayers: download.dataSelections.map((selection) => {
-							return {
-								remoteId: selection.layerId,
-								fields: selection.fields.filter(
-									(field) => !fieldsToHide || !fieldsToHide.has(field)
-								)
-							};
-						})
-					}
-				};
-
-				console.log('[downloads-menu] Submitting download request:', request);
-
-				try {
-					const response = await uprnDownloadService.requestJob(request);
-
-					if (!response || response.type === JobRequestResponseType.Error) {
-						download.status = DownloadStatus.Failed;
-						errorMessage = response?.message || 'Unknown error occurred while submitting download request.';
-						downloadsStore.updateDownloadStatus(download);
-						continue;
-					}
-
-					download.externalId = response.guid;
-					downloadsStore.updateDownloadStatus(download);
-				} catch (e) {
-					download.status = DownloadStatus.Failed;
-					downloadsStore.updateDownloadStatus(download);
-				}
+			} catch (e) {
+				download.status = DownloadStatus.Failed;
+				downloadsStore.updateDownloadStatus(download);
 			}
-		};
-
-		submitRequests();
-	});
+		}
+	}
 
 	async function checkJobStatuses() {
 		if (downloads.length <= 0 || !uprnDownloadService) {
 			return;
 		}
 
+		const downloadsToCheck: string[] = downloads
+			.filter(
+				(download) =>
+					download.externalId &&
+					download.status !== DownloadStatus.Completed &&
+					download.status !== DownloadStatus.Failed
+			)
+			.map((download) => download.externalId!);
+
 		const request: UprnDownloadGetJobStatusesRequest = {
-			jobs: downloads
-				.filter(
-					(download) =>
-						download.externalId &&
-						download.status !== DownloadStatus.Completed &&
-						download.status !== DownloadStatus.Failed
-				)
-				.map((download) => download.externalId!)
+			jobs: downloadsToCheck
 		};
 
+		console.log(
+			'[downloads-menu] Checking job statuses with request:',
+			request,
+			'downloads:',
+			downloads
+		);
 		if (request.jobs.length === 0) {
+			if (downloadsToCheck.length > 0) {
+				console.warn(
+					'[downloads-menu] No jobs to check statuses for. However, there were downloads to check:',
+					downloadsToCheck,
+					'\nThis may indicate an issue with the download tracking logic or the indexDB was updated.',
+					'\n Removing invalid downloads...'
+				);
+
+				for (const externalId of downloadsToCheck) {
+					const localId = downloads.find((download) => download.externalId === externalId)?.localId;
+					if (!localId) {
+						continue;
+					}
+
+					downloadsStore.removeDownload(localId);
+				}
+			}
 			return;
 		}
 
@@ -156,6 +182,7 @@
 
 			switch (job.status.type) {
 				case JobStatusType.Submitted:
+					break; // still pending
 				case JobStatusType.Processing:
 					download.status = DownloadStatus.InProgress;
 					break;
@@ -242,13 +269,13 @@
 	{#if downloads.length > 0}
 		<ul class="selected-list">
 			{#each downloads as download}
-				<SelectionEntryCard title={
-				download.externalId 
-					? download.externalId 
-					: download.status !== DownloadStatus.Failed 
-						? 'Pending...'
-						: 'Failed to start download'
-				}>
+				<SelectionEntryCard
+					title={download.externalId
+						? download.externalId
+						: download.status !== DownloadStatus.Failed
+							? 'Pending...'
+							: 'Failed to start download'}
+				>
 					<Button
 						variant="ghost"
 						size="sm"
@@ -258,7 +285,7 @@
 						disabled
 					>
 						{@const StatusIcon = getStatusIcon(download.status)}
-							<StatusIcon size={14} class={download.status === 'in-progress' ? 'spinning' : ''} />
+						<StatusIcon size={14} class={download.status === 'in-progress' ? 'spinning' : ''} />
 					</Button>
 					{#if download.externalId}
 						<Button
