@@ -291,7 +291,7 @@
 						? download.externalId
 						: download.status !== DownloadStatus.Failed
 							? 'Pending...'
-							: 'Failed to start download'}
+							: 'Failed to process export'}
 				>
 					{#if download.errorMessage}
 						<span class="text-sm text-red-600 italic ml-2">{download.errorMessage}</span>
