@@ -208,6 +208,12 @@
                 "id": "995b781ceaf44fc5822ad2c15fcc0101",
                 "showFields": true,
                 "customConverterId": "aliasPath"
+            },
+            {
+                "_name": "ClimateJust - LSOAs (WA) (2011 - 2022 V3) - 2022 Data",
+                "id": "71c9876f8b4546889de4f4a5899b50d6",
+                "showFields": true,
+                "customConverterId": "aliasPath"
             }
         ],
         "visibilityGroups": [
