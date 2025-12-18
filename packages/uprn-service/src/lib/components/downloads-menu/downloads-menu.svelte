@@ -175,30 +175,32 @@
 		}
 
 		for (const job of response.jobs) {
-			const download = downloads.find((download) => download.externalId === job.guid);
-			if (!download) {
+			const matched = downloads.filter((download) => download.externalId === job.guid);
+			if (!matched || matched.length === 0) {
 				console.warn('[downloads-menu] Received job status for unknown download:', job.guid);
 				continue;
 			}
 
-			switch (job.status.type) {
-				case JobStatusType.Submitted:
-					break; // still pending
-				case JobStatusType.Processing:
-					download.status = DownloadStatus.InProgress;
-					break;
-				case JobStatusType.Completed:
-					download.status = DownloadStatus.Completed;
-					break;
-				case JobStatusType.Error:
-					download.status = DownloadStatus.Failed;
-					break;
-				default:
-					console.warn('[downloads-menu] Unknown job status type:', job.status.type);
-					break;
-			}
+			for (const download of matched) {
+				switch (job.status.type) {
+					case JobStatusType.Submitted:
+						break; // still pending
+					case JobStatusType.Processing:
+						download.status = DownloadStatus.InProgress;
+						break;
+					case JobStatusType.Completed:
+						download.status = DownloadStatus.Completed;
+						break;
+					case JobStatusType.Error:
+						download.status = DownloadStatus.Failed;
+						break;
+					default:
+						console.warn('[downloads-menu] Unknown job status type:', job.status.type);
+						break;
+				}
 
-			downloadsStore.updateDownloadStatus(download);
+				downloadsStore.updateDownloadStatus(download);
+			}
 		}
 	}
 
