@@ -77,6 +77,7 @@ export type DownloadEntry = {
 	localId: string;
 	externalId?: string;
 	status: DownloadStatus;
+	errorMessage?: string;
 	areaSelection: AreaSelectionInfo;
 	dataSelections: DataSelectionInfo[];
 };

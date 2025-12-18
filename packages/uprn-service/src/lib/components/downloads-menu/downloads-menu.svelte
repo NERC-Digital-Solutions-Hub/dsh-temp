@@ -34,7 +34,6 @@
 	const { webMapStore, uprnDownloadService, fieldsToHide }: Props = $props();
 
 	let copiedUrls = $state<Set<string>>(new Set()); // track which URLs have been recently copied
-	let errorMessage = $state<string | null>(null);
 	const downloads = $derived.by(() => downloadsStore.getDownloads());
 
 	/**
@@ -103,8 +102,9 @@
 
 				if (!response || !response.guid || response.type !== JobRequestResponseType.Success) {
 					download.status = DownloadStatus.Failed;
-					errorMessage =
+					download.errorMessage =
 						response?.message || 'Unknown error occurred while submitting download request.';
+					console.error('[downloads-menu] Download request failed:', response);
 					downloadsStore.updateDownloadStatus(download);
 					continue;
 				}
@@ -213,7 +213,7 @@
 		if (download) {
 			download.status = DownloadStatus.Pending;
 			download.externalId = undefined; // Clear external ID to force new submission
-			errorMessage = null; // Clear error message
+			download.errorMessage = undefined; // Clear error message
 			downloadsStore.updateDownloadStatus(download);
 		}
 	}
@@ -293,6 +293,9 @@
 							? 'Pending...'
 							: 'Failed to start download'}
 				>
+					{#if download.errorMessage}
+						<span class="text-sm text-red-600 italic ml-2">{download.errorMessage}</span>
+					{/if}
 					<Button
 						variant="ghost"
 						size="sm"
@@ -329,8 +332,6 @@
 						>
 							<Download />
 						</Button>
-					{:else if download.externalId && download.status === 'failed' && errorMessage}
-						<p class="text-sm text-red-600 ml-2">{errorMessage}</p>
 					{/if}
 					{#if download.status === 'failed'}
 						<Button

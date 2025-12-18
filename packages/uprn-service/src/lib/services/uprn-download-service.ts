@@ -66,23 +66,45 @@ export class UprnDownloadService {
 		request: UprnDownloadJobRequest
 	): Promise<UprnDownloadJobRequestResponse | undefined> {
 		try {
-			console.log('[uprn-download-service] requesting job with request:', request);
-
 			const url = `${this.#endpoints.baseUrl}${this.#endpoints.requestJobRoute}`;
+
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
 				},
 				body: JSON.stringify(request)
 			});
 
+			const contentType = response.headers.get('content-type') ?? '';
+			const rawBody = await response.text();
+
+			const parsedBody =
+				contentType.includes('application/json') && rawBody
+					? (() => {
+							try {
+								return JSON.parse(rawBody);
+							} catch {
+								return undefined;
+							}
+						})()
+					: undefined;
+
 			if (!response.ok) {
-				throw new Error(`Failed to request job: ${response.statusText}`);
+				// Always return something your UI can display
+				console.log('Job request failed:', response.status, rawBody, parsedBody);
+				return (
+					parsedBody ??
+					({
+						type: 'error',
+						guid: (parsedBody as any)?.guid ?? '',
+						message: rawBody || response.statusText || `Request failed (${response.status})`
+					} as UprnDownloadJobRequestResponse)
+				);
 			}
 
-			const data: UprnDownloadJobRequestResponse = await response.json();
-			return data;
+			return parsedBody as UprnDownloadJobRequestResponse;
 		} catch (error) {
 			console.error('Error requesting job:', error);
 			return undefined;
