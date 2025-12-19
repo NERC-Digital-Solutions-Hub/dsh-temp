@@ -9,7 +9,7 @@ node_modules
 /.svelte-kit
 /build
 /dist
-.vite/deps
+*/.vite
 
 # OS
 .DS_Store
