@@ -90,7 +90,7 @@ export class MapInteractionStore {
 					return false;
 				}
 				return (
-					this.isLayerInteractable(layer.id) &&
+					this.isLayerInteractable(layer.title as string) &&
 					graphic.attributes?.[layer.objectIdField] !== undefined
 				);
 			});
@@ -106,7 +106,7 @@ export class MapInteractionStore {
 			if (
 				!graphic ||
 				!layer ||
-				!this.isLayerInteractable(layer.id) ||
+				!this.isLayerInteractable(layer.title as string) ||
 				graphic.attributes?.[layer.objectIdField] === undefined
 			) {
 				this.clearHoverHighlight();
@@ -169,7 +169,7 @@ export class MapInteractionStore {
 			if (
 				!graphic ||
 				!layer ||
-				!this.isLayerInteractable(layer.id) ||
+				!this.isLayerInteractable(layer.title as string) ||
 				graphic.attributes?.[layer.objectIdField] === undefined
 			) {
 				return;
@@ -229,12 +229,12 @@ export class MapInteractionStore {
 	}
 
 	/**
-	 * Check if a layer is interactable based on its ID
-	 * @param layerId - The ID of the layer to check
+	 * Check if a layer is interactable based on its name
+	 * @param layerName - The name of the layer to check
 	 * @returns True if the layer is interactable, false otherwise
 	 */
-	private isLayerInteractable(layerId: string): boolean {
-		return this.interactableLayers.has(layerId);
+	private isLayerInteractable(layerName: string): boolean {
+		return this.interactableLayers.has(layerName);
 	}
 
 	/**

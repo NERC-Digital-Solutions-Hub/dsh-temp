@@ -4,7 +4,7 @@ import FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
 import { SvelteMap } from 'svelte/reactivity';
 
 export type AreaSelectionFieldInfo = {
-	id: string;
+	layerName: string;
 	nameField: string;
 	codeField: string;
 };
@@ -327,7 +327,7 @@ export class AreaSelectionInteractionStore {
 		}
 
 		const nameField: string | undefined = this.fieldInfos.find(
-			(l) => l.id === this.selectionViewState?.layerView?.layer?.id
+			(l) => l.layerName === this.selectionViewState?.layerView?.layer?.title
 		)?.nameField;
 
 		if (!nameField) {
@@ -350,7 +350,7 @@ export class AreaSelectionInteractionStore {
 			return null;
 		}
 		const codeField: string | undefined = this.fieldInfos.find(
-			(l) => l.id === this.selectionViewState?.layerView?.layer?.id
+			(l) => l.layerName === this.selectionViewState?.layerView?.layer?.title
 		)?.codeField;
 		if (!codeField) {
 			console.warn(
