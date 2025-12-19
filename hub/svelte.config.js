@@ -25,6 +25,11 @@ const config = {
 					return;
 				}
 
+				if (status === 404) {
+					console.warn('Ignoring prerender 404 error on', path);
+					return;
+				}
+
 				throw new Error(message);
 			},
 			handleUnseenRoutes: 'warn'
