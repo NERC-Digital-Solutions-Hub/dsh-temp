@@ -5,10 +5,7 @@ import {
 	type TreeviewNodeConfig,
 	type VisibilityGroupConfig
 } from '$lib/types/treeview';
-import {
-	getLayerTreeviewItemType,
-	getSublayerIdFromParentId
-} from '$lib/utils/treeview';
+import { getLayerTreeviewItemType, getSublayerIdFromParentId } from '$lib/utils/treeview';
 import Sublayer from '@arcgis/core/layers/support/Sublayer';
 
 /**
@@ -126,7 +123,7 @@ export class TreeviewConfigStore {
 			for (const field of featureLayer.fields ?? []) {
 				this.#getOrCreateFieldNodeConfig(
 					this.#getFieldNodeId(featureLayer.id, field.name),
-					field.alias || field.name,
+					field.name || field.alias || 'UNKNOWN_NAME',
 					nodeConfig
 				);
 			}
