@@ -97,12 +97,14 @@ export const updateUserDownload = async (
 	localId: string,
 	externalId?: string,
 	status?: DownloadStatus,
+	errorMessage?: string,
 	areaSelection?: AreaSelectionInfo,
 	dataSelections?: DataSelectionInfo[]
 ) => {
 	const update: Record<string, any> = {};
 	if (externalId !== undefined) update.externalId = externalId;
 	if (status !== undefined) update.status = status;
+	if (errorMessage !== undefined) update.errorMessage = errorMessage;
 	if (areaSelection !== undefined) update.areaSelection = areaSelection;
 	if (dataSelections !== undefined) update.dataSelections = dataSelections;
 
