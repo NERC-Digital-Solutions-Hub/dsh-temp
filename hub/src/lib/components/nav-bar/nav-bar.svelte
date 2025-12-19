@@ -81,7 +81,7 @@
 								</a>
 							</NavigationMenu.Link>
 							<NavigationMenu.Link href="#">
-								<a href={`${base}/apps/ai-where-to-build-2`}>
+								<a href={`${base}/apps/ai-where-to-build`}>
 									<div class="font-medium">Where to Build (AI)</div>
 									<div class="text-muted-foreground">
 										Identify potential sites for housing and undertake a site analysis based on your
