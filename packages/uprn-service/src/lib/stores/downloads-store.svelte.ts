@@ -29,6 +29,7 @@ class DownloadsStore {
 			entry.localId,
 			entry.externalId,
 			entry.status,
+			entry.errorMessage,
 			entry.areaSelection,
 			entry.dataSelections
 		);
@@ -55,6 +56,7 @@ class DownloadsStore {
 				localId: download.localId,
 				externalId: download.externalId,
 				status: download.status,
+				errorMessage: download.errorMessage,
 				areaSelection: download.areaSelection,
 				dataSelections: download.dataSelections
 			});
