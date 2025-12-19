@@ -132,9 +132,27 @@ export class CustomRendererService {
 		}
 
 		// Find the custom renderer field mapping
-		const customRendererField = this.#data.CustomRenderers_Fields.find(
+		let customRendererField = this.#data.CustomRenderers_Fields.find(
 			(crf) => crf.FieldId === fieldRecord.Id
 		);
+
+		// TODO: Remove this fallback logic after data correction
+		if (!customRendererField) {
+			const newfieldRecord = this.#data.Fields.find(
+				(f) =>
+					f.FeatureLayerId === featureLayerRecord.Id &&
+					fieldName.includes(f.Name) &&
+					f !== fieldRecord
+			);
+			console.warn(
+				`[custom-renderer-service] could not find custom renderer field for field ${fieldName}. Falling back to similar field ${newfieldRecord?.Name}`
+			);
+			if (newfieldRecord) {
+				customRendererField = this.#data.CustomRenderers_Fields.find(
+					(crf) => crf.FieldId === newfieldRecord.Id
+				);
+			}
+		}
 
 		if (!customRendererField) {
 			console.warn(
