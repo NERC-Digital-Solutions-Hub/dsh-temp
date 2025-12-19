@@ -133,7 +133,7 @@ export class WebMapStore {
 
 		this.data = webmap;
 
-		await this.data.when();
+		await this.data.loadAll();
 		if (this.data.loaded) {
 			this.isLoaded = true;
 		}
