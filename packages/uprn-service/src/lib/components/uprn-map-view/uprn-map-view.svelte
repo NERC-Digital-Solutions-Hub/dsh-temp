@@ -139,6 +139,7 @@
 			mapView.container = mapContainer;
 			mapView.popupEnabled = false;
 			mapView.map = webMap ?? undefined;
+			mapView.background = { color: '#CFD3D4' };
 
 			mapView.ui.move('zoom', 'top-right');
 			await mapView.when();
