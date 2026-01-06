@@ -1,5 +1,5 @@
 {
-    "baseUrl": "https://dshapitest.xyz/uprn-download",
+    "baseUrl": "http://localhost:3000",
     "healthRoute": "/healthz",
     "requestJobRoute": "/request-job",
     "requestJobStatusesRoute": "/request-job-statuses",
